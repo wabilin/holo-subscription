@@ -2,7 +2,8 @@ import * as functions from 'firebase-functions';
 import parseScheduleHtml, { LiveInfo } from 'holo-schedule'
 import getScheduleHtml from 'holo-schedule/lib/getScheduleHtml'
 
-import admin = require('firebase-admin');
+import { firestore } from 'firebase-admin'
+import { getFirestore, getStreamerImageDict, setStreamerImageDict } from './util/db'
 
 interface ScheduleItem extends LiveInfo {
   dailyNotificationSent: boolean
@@ -10,19 +11,11 @@ interface ScheduleItem extends LiveInfo {
 }
 
 interface ScheduleItemFromDb extends Omit<ScheduleItem, 'time'> {
-  time: admin.firestore.Timestamp
+  time: firestore.Timestamp
 }
 
 function isSameTime(a: Date, b: Date) {
   return a.toUTCString() === b.toUTCString()
-}
-
-function getFirestore() {
-  if (!admin.apps.length) {
-    admin.initializeApp();
-  }
-
-  return admin.firestore();
 }
 
 function itemKey(live: LiveInfo) {
@@ -32,16 +25,13 @@ function itemKey(live: LiveInfo) {
 const scheduleUpdater = functions.pubsub.schedule('every 1 hours').onRun(async (context) => {
   const html = await getScheduleHtml()
 
-  const db = getFirestore()
-  const dictRef = db.collection('docs').doc('streamerImageDict');
 
-  const doc = await dictRef.get()
-  const streamerImageDict = doc.exists ? doc.data() : {}
-
+  const streamerImageDict = await getStreamerImageDict() || {}
   const { lives: allLives, dict } = parseScheduleHtml(html, streamerImageDict)
-  await dictRef.set(dict)
+  await setStreamerImageDict(dict)
 
   const now = new Date()
+  const db = getFirestore()
   const scheduleRef = db.collection('schedule');
   const snapshot = await scheduleRef.where('time', '>', now).get()
 
