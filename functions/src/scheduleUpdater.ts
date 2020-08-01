@@ -9,6 +9,10 @@ interface ScheduleItem extends LiveInfo {
   justBeforeNotificationSent: boolean
 }
 
+interface ScheduleItemFromDb extends Omit<ScheduleItem, 'time'> {
+  time: admin.firestore.Timestamp
+}
+
 function isSameTime(a: Date, b: Date) {
   return a.toUTCString() === b.toUTCString()
 }
@@ -43,16 +47,19 @@ const scheduleUpdater = functions.pubsub.schedule('every 1 hours').onRun(async (
 
   const storedSchedule: Record<string, ScheduleItem> = {}
   snapshot.forEach((x) => {
-    const item = x.data() as ScheduleItem
-    storedSchedule[item.link] = item
+    const item = x.data() as ScheduleItemFromDb
+    storedSchedule[item.link] = {
+      ...item,
+      time: item.time.toDate()
+    }
   })
 
   const lives = allLives
-  .filter(x => x.time > now)
-  .filter(x => {
-    const stored = storedSchedule[x.link]
-    return !stored || !isSameTime(x.time, stored.time)
-  })
+    .filter(x => x.time > now)
+    .filter(x => {
+      const stored = storedSchedule[x.link]
+      return !stored || !isSameTime(x.time, stored.time)
+    })
 
   const updatePromises = lives.map(live => {
     const item: ScheduleItem = {
