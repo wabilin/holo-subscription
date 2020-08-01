@@ -2,6 +2,7 @@
   "name": "functions",
   "scripts": {
     "lint": "tslint --project tsconfig.json",
+    "test": "jest",
     "build": "tsc",
     "serve": "npm run build && firebase emulators:start --only functions",
     "shell": "npm run build && firebase functions:shell",
@@ -18,6 +19,10 @@
     "firebase-functions": "^3.6.1"
   },
   "devDependencies": {
+    "@babel/core": "^7.11.0",
+    "@babel/preset-env": "^7.11.0",
+    "@babel/preset-typescript": "^7.10.4",
+    "@types/jest": "^26.0.8",
     "firebase-functions-test": "^0.2.0",
     "jest": "^26.2.2",
     "tslint": "^5.12.0",
