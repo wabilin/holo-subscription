@@ -16,7 +16,7 @@ bot.command("test", (ctx) => {
   return ctx.reply("Hi")
 });
 
-export const helloBot = functions.https.onRequest(async (request, response) => {
+export const telegramBot = functions.https.onRequest(async (request, response) => {
     // Catch all workaround
   bot.on('message', () => {
     response.status(200).end()
