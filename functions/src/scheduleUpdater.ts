@@ -5,7 +5,9 @@ import getScheduleHtml from 'holo-schedule/lib/getScheduleHtml'
 import admin = require('firebase-admin');
 
 const scheduleUpdater = functions.pubsub.schedule('every 1 hours').onRun(async (context) => {
-  // admin.initializeApp();
+  if (!admin.apps.length) {
+    admin.initializeApp();
+  }
   const db = admin.firestore();
 
   const html = await getScheduleHtml()
