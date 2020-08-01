@@ -10,14 +10,14 @@ let tg: Telegram
 
 function liveInfoMessage(live: LiveInfo): string {
   const now = new Date()
-  const { streamer, guests, time } = live
+  const { streamer, guests, time, link } = live
   const minDiff = Math.floor((time.valueOf() - now.valueOf()) / 1000 / 60)
 
   let msg = `Streaming of ${streamer}`
   if (guests.length) {
     msg += ` with ${guests.join(' ,')}`
   }
-  msg += ` will start in ${minDiff} mins.`
+  msg += ` will start in ${minDiff} mins. \n${link}`
 
   return msg
 }
