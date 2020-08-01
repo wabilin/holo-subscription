@@ -1,8 +1,8 @@
-import * as functions from 'firebase-functions';
+import { getSecrets } from './secrets'
 import { Telegraf } from "telegraf";
 
 export function createBot() {
-  const token: string = functions.config().bot.token;
-  const username: string = functions.config().bot.username;
+  const { bot } = getSecrets();
+  const { token, username } = bot;
   return new Telegraf(token, { username });
 }

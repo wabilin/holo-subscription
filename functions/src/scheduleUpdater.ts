@@ -2,17 +2,12 @@ import * as functions from 'firebase-functions';
 import parseScheduleHtml, { LiveInfo } from 'holo-schedule'
 import getScheduleHtml from 'holo-schedule/lib/getScheduleHtml'
 
-import { firestore } from 'firebase-admin'
-import { getFirestore, getStreamerImageDict, setStreamerImageDict } from './util/db'
-
-interface ScheduleItem extends LiveInfo {
-  dailyNotificationSent: boolean
-  justBeforeNotificationSent: boolean
-}
-
-interface ScheduleItemFromDb extends Omit<ScheduleItem, 'time'> {
-  time: firestore.Timestamp
-}
+import { ScheduleItem, ScheduleItemFromDb } from './types'
+import {
+  getStreamerImageDict,
+  getScheduleRef,
+  setStreamerImageDict,
+} from "./util/db";
 
 function isSameTime(a: Date, b: Date) {
   return a.toUTCString() === b.toUTCString()
@@ -31,8 +26,7 @@ const scheduleUpdater = functions.pubsub.schedule('every 1 hours').onRun(async (
   await setStreamerImageDict(dict)
 
   const now = new Date()
-  const db = getFirestore()
-  const scheduleRef = db.collection('schedule');
+  const scheduleRef = getScheduleRef();
   const snapshot = await scheduleRef.where('time', '>', now).get()
 
   const storedSchedule: Record<string, ScheduleItem> = {}
