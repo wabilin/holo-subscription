@@ -35,7 +35,7 @@ async function subscribe(ctx: Context, vtuber: string) {
     chatId: chat.id,
   });
 
-  return ctx.reply(`Subscribe ${vtuber} successfully ❤️`);
+  return ctx.reply(`Subscribed ${vtuber} ❤️`);
 }
 
 async function unsubscribe(ctx: Context, vtuber: string) {
@@ -79,9 +79,8 @@ function webhookBot() {
     const vtuber = text.trim().split(/\s+/)[1];
 
     if (!vtuber) {
-      const keyboard = Markup.keyboard(VTUBERS.map(name => `+${name}`), {
-        columns: 3
-      }).oneTime().extra()
+      const buttons = VTUBERS.map(name => `+${name}`).concat(['Cancel'])
+      const keyboard = Markup.keyboard(buttons, { columns: 3 }).oneTime(true).extra()
 
       return ctx.reply('Who would you like to subscribe?', keyboard)
     }
@@ -89,6 +88,9 @@ function webhookBot() {
     return subscribe(ctx, vtuber)
   });
 
+  bot.command("haaton", async (ctx) => {
+    return subscribe(ctx, '赤井はあと')
+  });
 
   // Subscribe with format "+Name"
   bot.hears(/^\+(.+)/, (ctx) => {
@@ -104,9 +106,8 @@ function webhookBot() {
 
     const vtubers = await getSubscribedVtubers(chat.id)
 
-    const keyboard = Markup.keyboard(vtubers.map(name => `-${name}`), {
-      columns: 3
-    }).oneTime().extra()
+    const buttons = vtubers.map(name => `-${name}`).concat(['Cancel'])
+    const keyboard = Markup.keyboard(buttons, { columns: 3 }).oneTime(true).extra()
 
     return ctx.reply('Who would you like to unsubscribe?', keyboard)
   })
