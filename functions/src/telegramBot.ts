@@ -38,10 +38,10 @@ function webhookBot() {
     if (!vtuber) {
       // return ctx.reply("Failed. (Wrong format?)");
       const keyboard = Markup.keyboard(VTUBERS.map(name => `+${name}`), {
-        wrap: (btn, index, row) => row.length > 2
-      })
+        columns: 3
+      }).oneTime().extra()
 
-      return ctx.reply('Who would you like to subscribe?', keyboard.extra())
+      return ctx.reply('Who would you like to subscribe?', keyboard)
     }
 
     const vtubers = await getVtuberList();
