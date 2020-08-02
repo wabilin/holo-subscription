@@ -129,12 +129,6 @@ const telegramBot = functions.https.onRequest(async (request, response) => {
   const bot = webhookBot();
   // Catch all workaround
   bot.on("message", (ctx) => {
-    functions.logger.log(`In message`)
-
-    functions.logger.log(`From chat: ${ctx.chat?.id}`)
-    functions.logger.log(`inline query: ${ctx.inlineQuery}`)
-    functions.logger.log(`callback query: ${ctx.callbackQuery}`)
-
     response.status(200).end();
   });
 
