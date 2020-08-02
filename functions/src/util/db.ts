@@ -25,10 +25,11 @@ export async function setStreamerImageDict(dict: Record<string, string>): Promis
 }
 
 export async function addSubscription(subscription: Subscription): Promise<void> {
+  const { chatId, vtuber } = subscription
   const db = getFirestore()
   const subscriptionsRef = db.collection('dailySubscriptions')
 
-  await subscriptionsRef.add(subscription)
+  await subscriptionsRef.doc(`${chatId}-${vtuber}`).set(subscription)
 }
 
 export function getSubscriptionsRef() {
