@@ -1,4 +1,5 @@
 import * as functions from "firebase-functions";
+import { Markup } from 'telegraf'
 
 import { getStreamerImageDict, addSubscription } from "./util/db";
 import { createBot } from "./util/bot";
@@ -34,14 +35,14 @@ function webhookBot() {
     const vtuber = text.trim().split(/\s+/)[1];
 
     if (!vtuber) {
-      return ctx.reply("Failed. (Wrong format?)");
+      // return ctx.reply("Failed. (Wrong format?)");
+      Markup.inlineKeyboard([
+        Markup.callbackButton('赤井はあと', 'subscribe/赤井はあと')
+      ])
+      return ctx.reply('Who would you like to subscribe?', )
     }
 
     const vtubers = await getVtuberList();
-
-    // tmp
-    functions.logger.log(vtubers)
-
     if (!vtubers.includes(vtuber)) {
       return ctx.reply("Failed. VTuber name not found.");
     }
@@ -58,6 +59,16 @@ function webhookBot() {
 
     return ctx.reply(`Subscribe ${vtuber} successfully ❤️`);
   });
+
+  bot.action(/subscribe\/(.+)/, (ctx) => {
+    const match = ctx.match && ctx.match[1]
+    functions.logger.log(`From chat: ${ctx.chat?.id}`)
+    functions.logger.log(`inline query: ${ctx.inlineQuery}`)
+    functions.logger.log(`callback query: ${ctx.callbackQuery}`)
+    functions.logger.log(`match: ${match}`)
+
+    return ctx.reply('Subscript successfully')
+  })
 
   bot.command('unsubscribe', (ctx) => {
     return ctx.reply(`TODO️`);
