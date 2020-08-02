@@ -4,7 +4,7 @@ import { LiveInfo } from 'holo-schedule'
 
 import { ScheduleItemFromDb, Subscription } from './types'
 import { getSecrets } from './util/secrets'
-import { getSubscriptionsRef, getScheduleRef } from './util/db'
+import { getSubscriptionsRef, getScheduleRef, getFirestore } from './util/db'
 
 let tg: Telegram
 
@@ -13,9 +13,9 @@ function liveInfoMessage(live: LiveInfo): string {
   const { streamer, guests, time, link } = live
   const minDiff = Math.floor((time.valueOf() - now.valueOf()) / 1000 / 60)
 
-  let msg = `Streaming of ${streamer}`
+  let msg = `${streamer}`
   if (guests.length) {
-    msg += ` with ${guests.join(' ,')}`
+    msg += ` with ${guests.join(', ')}`
   }
   msg += ` will start in ${minDiff} mins. \n${link}`
 
@@ -44,14 +44,22 @@ async function notifyForLive (live: LiveInfo) {
 
 const sendNotification = functions.pubsub.schedule('every 25 minutes').onRun(async (context) => {
   const scheduleRef = getScheduleRef()
-  const schedule = await scheduleRef.where('time', '>', new Date()).get()
+    .where('time', '>', new Date())
+    .where('dailyNotificationSent', '==', false)
+
+  const db = getFirestore()
+  const schedule = await scheduleRef.get()
 
   const { bot } = getSecrets()
   tg = new Telegram(bot.token)
 
+  const batch = db.batch();
+
   const jobs: Promise<void>[] = []
   schedule.forEach(x => {
     const item = x.data() as ScheduleItemFromDb
+    batch.update(x.ref, { dailyNotificationSent: true })
+
     jobs.push(notifyForLive({
       ...item,
       time: item.time.toDate()
@@ -59,6 +67,7 @@ const sendNotification = functions.pubsub.schedule('every 25 minutes').onRun(asy
   })
 
   await Promise.all(jobs)
+  await batch.commit()
 
   return null
 })
