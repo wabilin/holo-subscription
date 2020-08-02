@@ -3,6 +3,15 @@ import * as functions from "firebase-functions";
 import { getStreamerImageDict, addSubscription } from "./util/db";
 import { createBot } from "./util/bot";
 
+async function getVtuberList() {
+  const dict = await getStreamerImageDict();
+  if (!dict) {
+    throw new Error('get dic failed')
+  }
+
+  return Object.keys(dict);
+}
+
 function webhookBot() {
   const bot = createBot();
 
@@ -28,8 +37,7 @@ function webhookBot() {
       return ctx.reply("Failed. (Wrong format?)");
     }
 
-    const dict = (await getStreamerImageDict())!;
-    const vtubers = Object.keys(dict);
+    const vtubers = await getVtuberList();
 
     // tmp
     functions.logger.log(vtubers)
@@ -50,6 +58,10 @@ function webhookBot() {
 
     return ctx.reply(`Subscribe ${vtuber} successfully ❤️`);
   });
+
+  bot.command('unsubscribe', (ctx) => {
+    return ctx.reply(`TODO️`);
+  })
 
   return bot;
 }
