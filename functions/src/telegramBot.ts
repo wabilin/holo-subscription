@@ -35,7 +35,7 @@ async function subscribe(ctx: Context, vtuber: string) {
     chatId: chat.id,
   });
 
-  return ctx.reply(`Subscribed ${vtuber} ❤️`);
+  return ctx.reply(`Subscribed ${vtuber} ❤️`, Markup.removeKeyboard().extra());
 }
 
 async function unsubscribe(ctx: Context, vtuber: string) {
@@ -54,7 +54,7 @@ async function unsubscribe(ctx: Context, vtuber: string) {
     chatId: chat.id,
   });
 
-  return ctx.reply(`Unsubscribed ${vtuber}.️`);
+  return ctx.reply(`Unsubscribed ${vtuber}.️`, Markup.removeKeyboard().extra());
 }
 
 function webhookBot() {
