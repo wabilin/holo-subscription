@@ -1,6 +1,7 @@
 import * as functions from 'firebase-functions';
 import { Telegram } from 'telegraf'
 import { LiveInfo } from 'holo-schedule'
+import * as moment from 'moment-timezone'
 
 import { ScheduleItemFromDb, Subscription } from './types'
 import { getSecrets } from './util/secrets'
@@ -9,15 +10,14 @@ import { getSubscriptionsRef, getScheduleRef, getFirestore } from './util/db'
 let tg: Telegram
 
 function liveInfoMessage(live: LiveInfo): string {
-  const now = new Date()
   const { streamer, guests, time, link } = live
-  const minDiff = Math.floor((time.valueOf() - now.valueOf()) / 1000 / 60)
+  const formattedTime = moment(time).tz('Asia/Tokyo').format('MM/DD hh:mm [(Japan)]')
 
   let msg = `${streamer}`
   if (guests.length) {
     msg += ` with ${guests.join(', ')}`
   }
-  msg += ` will start in ${minDiff} mins. \n${link}`
+  msg += `\n${formattedTime}\n${link}`
 
   return msg
 }
