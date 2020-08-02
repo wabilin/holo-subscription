@@ -30,6 +30,10 @@ function webhookBot() {
 
     const dict = (await getStreamerImageDict())!;
     const vtubers = Object.keys(dict);
+
+    // tmp
+    functions.logger.log(vtubers)
+
     if (!vtubers.includes(vtuber)) {
       return ctx.reply("Failed. VTuber name not found.");
     }
