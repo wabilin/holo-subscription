@@ -10,17 +10,21 @@ export function getFirestore() {
 
 export async function getStreamerImageDict() {
   const db = getFirestore()
-  const dictRef = db.collection('docs').doc('streamerImageDict');
+  const oldDictRef = db.collection('docs').doc('streamerImageDict');
 
-  const doc = await dictRef.get()
+  const doc = await oldDictRef.get()
   return doc.data()
 }
 
 export async function setStreamerImageDict(dict: Record<string, string>): Promise<void> {
   const db = getFirestore()
-  const dictRef = db.collection('docs').doc('streamerImageDict');
+  const batch = db.batch()
+  const ref = db.collection('streamerImages')
+  Object.keys(dict).forEach(([vtuber, img]) => {
+    batch.set(ref.doc(vtuber), { vtuber, img })
+  })
 
-  await dictRef.set(dict, { merge: true })
+  await batch.commit()
 }
 
 function subscriptionKey(chatId: number, vtuber: string) {
