@@ -3,6 +3,7 @@ import { Markup } from 'telegraf'
 
 import { getStreamerImageDict, addSubscription } from "./util/db";
 import { createBot } from "./util/bot";
+import { VTUBERS } from './util/constants'
 
 async function getVtuberList() {
   const dict = await getStreamerImageDict();
@@ -36,12 +37,9 @@ function webhookBot() {
 
     if (!vtuber) {
       // return ctx.reply("Failed. (Wrong format?)");
-      const keyboard = Markup.inlineKeyboard([
-        [
-          Markup.callbackButton('赤井はあと', 'subscribe/赤井はあと'),
-          Markup.callbackButton('test', 'test')
-        ]
-      ])
+      const keyboard = Markup.keyboard(VTUBERS.map(name => `+${name}`), {
+        wrap: (btn, index, row) => row.length > 2
+      })
 
       return ctx.reply('Who would you like to subscribe?', keyboard.extra())
     }
@@ -64,42 +62,14 @@ function webhookBot() {
     return ctx.reply(`Subscribe ${vtuber} successfully ❤️`);
   });
 
-  bot.action(/subscribe\/(.+)/, (ctx) => {
-    const match = ctx.match && ctx.match[1]
-    functions.logger.log(`From chat: ${ctx.chat?.id}`)
-    functions.logger.log(`inline query: ${ctx.inlineQuery}`)
-    functions.logger.log(`callback query: ${ctx.callbackQuery}`)
-    functions.logger.log(`match: ${match}`)
 
-    return ctx.reply('Subscript successfully')
-  })
-
-  bot.hears(/subscribe\/(.+)/, (ctx) => {
+  bot.hears(/^\+(.+)/, (ctx) => {
     functions.logger.log(`Hears:`)
     const match = ctx.match && ctx.match[1]
     functions.logger.log(`From chat: ${ctx.chat?.id}`)
-    functions.logger.log(`inline query: ${ctx.inlineQuery}`)
-    functions.logger.log(`callback query: ${ctx.callbackQuery}`)
     functions.logger.log(`match: ${match}`)
 
-    return ctx.reply('Subscript successfully')
-  })
-
-  bot.action('test', (ctx) => {
-      functions.logger.log(`From chat: ${ctx.chat?.id}`)
-      functions.logger.log(`inline query: ${ctx.inlineQuery}`)
-      functions.logger.log(`callback query: ${ctx.callbackQuery}`)
-
-      return ctx.reply('Subscript successfully')
-  })
-
-  bot.hears('test', (ctx) => {
-    functions.logger.log(`Hears:`)
-    functions.logger.log(`From chat: ${ctx.chat?.id}`)
-    functions.logger.log(`inline query: ${ctx.inlineQuery}`)
-    functions.logger.log(`callback query: ${ctx.callbackQuery}`)
-
-    return ctx.reply('Subscript successfully')
+    return ctx.reply('Subscript successfully (TODO)')
   })
 
   bot.command('unsubscribe', (ctx) => {
