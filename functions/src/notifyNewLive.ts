@@ -5,24 +5,24 @@ import * as moment from 'moment-timezone'
 
 import { ScheduleItemFromDb, Subscription } from './types'
 import { getSecrets } from './util/secrets'
-import { getSubscriptionsRef, getScheduleRef } from './util/db'
-
-let tg: Telegram
+import { getSubscriptionsRef } from './util/db'
 
 function liveInfoMessage(live: LiveInfo): string {
   const { streamer, guests, time, link } = live
   const formattedTime = moment(time).tz('Asia/Tokyo').format('MM/DD hh:mm [(Japan)]')
 
-  let msg = `${streamer}`
+  let msg = `${streamer} will start live at ${formattedTime}`
   if (guests.length) {
-    msg += ` with ${guests.join(', ')}`
+    msg += `\nGuests: ${guests.join(', ')}`
   }
-  msg += `\n${formattedTime}\n${link}`
+  msg += `\n${link}`
 
   return msg
 }
 
 async function notifyForLive (live: LiveInfo) {
+  const { bot } = getSecrets()
+  const tg = new Telegram(bot.token)
   const { streamer, guests } = live
   const message = liveInfoMessage(live)
 
@@ -42,28 +42,16 @@ async function notifyForLive (live: LiveInfo) {
   await Promise.all(jobs)
 }
 
-const sendNotification = functions.pubsub.schedule('every 25 minutes').onRun(async (context) => {
-  const scheduleRef = getScheduleRef()
-    .where('time', '>', new Date())
+const notifyNewLive = functions.firestore.document("schedule/{key}").onWrite(async (change, context) => {
+  const item = change.after.data() as ScheduleItemFromDb
 
-  const schedule = await scheduleRef.get()
+  // it's data delete event
+  if (!item) { return }
 
-  const { bot } = getSecrets()
-  tg = new Telegram(bot.token)
-
-  const jobs: Promise<void>[] = []
-  schedule.forEach(x => {
-    const item = x.data() as ScheduleItemFromDb
-
-    jobs.push(notifyForLive({
-      ...item,
-      time: item.time.toDate()
-    }))
+  await notifyForLive({
+    ...item,
+    time: item.time.toDate()
   })
-
-  await Promise.all(jobs)
-
-  return null
 })
 
-export default sendNotification;
+export default notifyNewLive;
