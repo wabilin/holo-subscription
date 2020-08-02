@@ -36,10 +36,11 @@ function webhookBot() {
 
     if (!vtuber) {
       // return ctx.reply("Failed. (Wrong format?)");
-      Markup.inlineKeyboard([
+      const keyboard = Markup.inlineKeyboard([
         Markup.callbackButton('赤井はあと', 'subscribe/赤井はあと')
       ])
-      return ctx.reply('Who would you like to subscribe?', )
+
+      return ctx.reply('Who would you like to subscribe?', keyboard.extra())
     }
 
     const vtubers = await getVtuberList();
