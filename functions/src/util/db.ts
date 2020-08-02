@@ -3,11 +3,12 @@ import admin = require('firebase-admin');
 admin.initializeApp();
 import { Subscription } from "../types";
 
+const SUBSCRIPTIONS = 'subscriptions'
+
 export function getFirestore() {
   functions.logger.debug('apps:', admin.apps.map(x => x && x.name))
   return admin.firestore();
 }
-
 
 export async function getStreamerImageDict() {
   const db = getFirestore()
@@ -24,17 +25,42 @@ export async function setStreamerImageDict(dict: Record<string, string>): Promis
   await dictRef.set(dict)
 }
 
-export async function addSubscription(subscription: Subscription): Promise<void> {
+function subscriptionKey(chatId: number, vtuber: string) {
+  return `${chatId}-${vtuber}`
+}
+
+function subscriptionDoc(subscription: Subscription) {
   const { chatId, vtuber } = subscription
   const db = getFirestore()
-  const subscriptionsRef = db.collection('dailySubscriptions')
+  const subscriptionsRef = db.collection(SUBSCRIPTIONS)
 
-  await subscriptionsRef.doc(`${chatId}-${vtuber}`).set(subscription)
+  const key = subscriptionKey(chatId, vtuber)
+  return subscriptionsRef.doc(key)
+}
+export async function addSubscription(subscription: Subscription): Promise<void> {
+  const doc = subscriptionDoc(subscription)
+  await doc.set(subscription)
+}
+
+export async function removeSubscription(subscription: Subscription): Promise<void> {
+  const doc = subscriptionDoc(subscription)
+  await doc.delete()
+}
+
+export async function getSubscribedVtubers(chatId: number): Promise<string[]> {
+  const ref = getSubscriptionsRef()
+  const subs = await ref.where('chatId', '==', chatId).get()
+  const vtubers: string[] = []
+  subs.forEach(sub => {
+    vtubers.push((sub.data() as Subscription).vtuber)
+  })
+
+  return vtubers
 }
 
 export function getSubscriptionsRef() {
   const db = getFirestore()
-  return db.collection('dailySubscriptions')
+  return db.collection(SUBSCRIPTIONS)
 }
 
 export function getScheduleRef() {

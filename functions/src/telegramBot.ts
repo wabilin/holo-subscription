@@ -1,7 +1,12 @@
 import * as functions from "firebase-functions";
-import { Markup } from 'telegraf'
+import { Markup, Context } from 'telegraf'
 
-import { getStreamerImageDict, addSubscription } from "./util/db";
+import {
+  getStreamerImageDict,
+  addSubscription,
+  getSubscribedVtubers,
+  removeSubscription,
+} from "./util/db";
 import { createBot } from "./util/bot";
 import { VTUBERS } from './util/constants'
 
@@ -12,6 +17,44 @@ async function getVtuberList() {
   }
 
   return Object.keys(dict);
+}
+
+async function subscribe(ctx: Context, vtuber: string) {
+  const vtubers = await getVtuberList();
+  if (!vtubers.includes(vtuber)) {
+    return ctx.reply("Failed. Vtuber name not found.");
+  }
+
+  const { chat } = ctx;
+  if (!chat) {
+    throw new Error("Chat not found.");
+  }
+
+  await addSubscription({
+    vtuber,
+    chatId: chat.id,
+  });
+
+  return ctx.reply(`Subscribe ${vtuber} successfully ❤️`);
+}
+
+async function unsubscribe(ctx: Context, vtuber: string) {
+  const { chat } = ctx;
+  if (!chat) {
+    throw new Error("Chat not found.");
+  }
+
+  const vtubers = await getSubscribedVtubers(chat.id);
+  if (!vtubers.includes(vtuber)) {
+    return ctx.reply(`You did not subscribed ${vtuber}.`);
+  }
+
+  await removeSubscription({
+    vtuber,
+    chatId: chat.id,
+  });
+
+  return ctx.reply(`Unsubscribed ${vtuber}.️`);
 }
 
 function webhookBot() {
@@ -36,7 +79,6 @@ function webhookBot() {
     const vtuber = text.trim().split(/\s+/)[1];
 
     if (!vtuber) {
-      // return ctx.reply("Failed. (Wrong format?)");
       const keyboard = Markup.keyboard(VTUBERS.map(name => `+${name}`), {
         columns: 3
       }).oneTime().extra()
@@ -44,37 +86,36 @@ function webhookBot() {
       return ctx.reply('Who would you like to subscribe?', keyboard)
     }
 
-    const vtubers = await getVtuberList();
-    if (!vtubers.includes(vtuber)) {
-      return ctx.reply("Failed. VTuber name not found.");
-    }
+    return subscribe(ctx, vtuber)
+  });
 
+
+  // Subscribe with format "+Name"
+  bot.hears(/^\+(.+)/, (ctx) => {
+    const vtuber = ctx.match && ctx.match[1] || 'unknown'
+    return subscribe(ctx, vtuber)
+  })
+
+  bot.command('unsubscribe', async (ctx) => {
     const { chat } = ctx;
     if (!chat) {
       throw new Error("Chat not found.");
     }
 
-    await addSubscription({
-      vtuber,
-      chatId: chat.id,
-    });
+    const vtubers = await getSubscribedVtubers(chat.id)
 
-    return ctx.reply(`Subscribe ${vtuber} successfully ❤️`);
-  });
+    const keyboard = Markup.keyboard(vtubers.map(name => `-${name}`), {
+      columns: 3
+    }).oneTime().extra()
 
-
-  bot.hears(/^\+(.+)/, (ctx) => {
-    functions.logger.log(`Hears:`)
-    const match = ctx.match && ctx.match[1]
-    functions.logger.log(`From chat: ${ctx.chat?.id}`)
-    functions.logger.log(`match: ${match}`)
-
-    return ctx.reply('Subscript successfully (TODO)')
+    return ctx.reply('Who would you like to unsubscribe?', keyboard)
   })
 
-  bot.command('unsubscribe', (ctx) => {
-    return ctx.reply(`TODO️`);
-  })
+    // Subscribe with format "+Name"
+    bot.hears(/^\-(.+)/, (ctx) => {
+      const vtuber = ctx.match && ctx.match[1] || 'unknown'
+      return unsubscribe(ctx, vtuber)
+    })
 
   return bot;
 }
