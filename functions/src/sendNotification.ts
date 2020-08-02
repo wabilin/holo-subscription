@@ -45,7 +45,6 @@ async function notifyForLive (live: LiveInfo) {
 const sendNotification = functions.pubsub.schedule('every 25 minutes').onRun(async (context) => {
   const scheduleRef = getScheduleRef()
     .where('time', '>', new Date())
-    .where('dailyNotificationSent', '==', false)
 
   const db = getFirestore()
   const schedule = await scheduleRef.get()
@@ -58,6 +57,10 @@ const sendNotification = functions.pubsub.schedule('every 25 minutes').onRun(asy
   const jobs: Promise<void>[] = []
   schedule.forEach(x => {
     const item = x.data() as ScheduleItemFromDb
+    if (item.dailyNotificationSent) {
+      return
+    }
+
     batch.update(x.ref, { dailyNotificationSent: true })
 
     jobs.push(notifyForLive({
