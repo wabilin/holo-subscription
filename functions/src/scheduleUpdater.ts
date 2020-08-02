@@ -46,7 +46,7 @@ const scheduleUpdater = functions.pubsub.schedule('every 1 hours').onRun(async (
     })
 
   const updatePromises = lives.map(live => {
-    return scheduleRef.doc(itemKey(live)).set(lives)
+    return scheduleRef.doc(itemKey(live)).set(live)
   })
   await Promise.all(updatePromises)
 
