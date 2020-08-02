@@ -37,7 +37,10 @@ function webhookBot() {
     if (!vtuber) {
       // return ctx.reply("Failed. (Wrong format?)");
       const keyboard = Markup.inlineKeyboard([
-        Markup.callbackButton('赤井はあと', 'subscribe/赤井はあと')
+        [
+          Markup.callbackButton('赤井はあと', 'subscribe/赤井はあと'),
+          Markup.callbackButton('test', 'test')
+        ]
       ])
 
       return ctx.reply('Who would you like to subscribe?', keyboard.extra())
@@ -67,6 +70,34 @@ function webhookBot() {
     functions.logger.log(`inline query: ${ctx.inlineQuery}`)
     functions.logger.log(`callback query: ${ctx.callbackQuery}`)
     functions.logger.log(`match: ${match}`)
+
+    return ctx.reply('Subscript successfully')
+  })
+
+  bot.hears(/subscribe\/(.+)/, (ctx) => {
+    functions.logger.log(`Hears:`)
+    const match = ctx.match && ctx.match[1]
+    functions.logger.log(`From chat: ${ctx.chat?.id}`)
+    functions.logger.log(`inline query: ${ctx.inlineQuery}`)
+    functions.logger.log(`callback query: ${ctx.callbackQuery}`)
+    functions.logger.log(`match: ${match}`)
+
+    return ctx.reply('Subscript successfully')
+  })
+
+  bot.action('test', (ctx) => {
+      functions.logger.log(`From chat: ${ctx.chat?.id}`)
+      functions.logger.log(`inline query: ${ctx.inlineQuery}`)
+      functions.logger.log(`callback query: ${ctx.callbackQuery}`)
+
+      return ctx.reply('Subscript successfully')
+  })
+
+  bot.hears('test', (ctx) => {
+    functions.logger.log(`Hears:`)
+    functions.logger.log(`From chat: ${ctx.chat?.id}`)
+    functions.logger.log(`inline query: ${ctx.inlineQuery}`)
+    functions.logger.log(`callback query: ${ctx.callbackQuery}`)
 
     return ctx.reply('Subscript successfully')
   })
