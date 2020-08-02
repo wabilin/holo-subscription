@@ -5,7 +5,7 @@ import * as moment from 'moment-timezone'
 
 import { ScheduleItemFromDb, Subscription } from './types'
 import { getSecrets } from './util/secrets'
-import { getSubscriptionsRef, getScheduleRef, getFirestore } from './util/db'
+import { getSubscriptionsRef, getScheduleRef } from './util/db'
 
 let tg: Telegram
 
@@ -46,22 +46,14 @@ const sendNotification = functions.pubsub.schedule('every 25 minutes').onRun(asy
   const scheduleRef = getScheduleRef()
     .where('time', '>', new Date())
 
-  const db = getFirestore()
   const schedule = await scheduleRef.get()
 
   const { bot } = getSecrets()
   tg = new Telegram(bot.token)
 
-  const batch = db.batch();
-
   const jobs: Promise<void>[] = []
   schedule.forEach(x => {
     const item = x.data() as ScheduleItemFromDb
-    if (item.dailyNotificationSent) {
-      return
-    }
-
-    batch.update(x.ref, { dailyNotificationSent: true })
 
     jobs.push(notifyForLive({
       ...item,
@@ -70,7 +62,6 @@ const sendNotification = functions.pubsub.schedule('every 25 minutes').onRun(asy
   })
 
   await Promise.all(jobs)
-  await batch.commit()
 
   return null
 })
