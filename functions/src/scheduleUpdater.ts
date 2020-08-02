@@ -25,6 +25,9 @@ const scheduleUpdater = functions.pubsub.schedule('every 1 hours').onRun(async (
   const { lives: allLives, dict } = parseScheduleHtml(html, streamerImageDict)
   await setStreamerImageDict(dict)
 
+  const names = Object.keys(dict)
+  functions.logger.log('Names in updated dict: ', names)
+
   const now = new Date()
   const scheduleRef = getScheduleRef();
   const snapshot = await scheduleRef.where('time', '>', now).get()
