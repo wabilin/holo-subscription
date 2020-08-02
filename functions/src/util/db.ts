@@ -22,7 +22,7 @@ export async function setStreamerImageDict(dict: Record<string, string>): Promis
   const db = getFirestore()
   const dictRef = db.collection('docs').doc('streamerImageDict');
 
-  await dictRef.set(dict)
+  await dictRef.set(dict, { merge: true })
 }
 
 function subscriptionKey(chatId: number, vtuber: string) {
