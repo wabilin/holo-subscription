@@ -1,14 +1,10 @@
 import * as functions from 'firebase-functions';
 import admin = require('firebase-admin');
+admin.initializeApp();
 import { Subscription } from "../types";
 
 export function getFirestore() {
   functions.logger.debug('apps:', admin.apps.map(x => x && x.name))
-
-  if (!admin.apps.length) {
-    admin.initializeApp();
-  }
-
   return admin.firestore();
 }
 

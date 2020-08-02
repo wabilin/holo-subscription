@@ -2,12 +2,12 @@ import * as functions from 'firebase-functions';
 import parseScheduleHtml, { LiveInfo } from 'holo-schedule'
 import getScheduleHtml from 'holo-schedule/lib/getScheduleHtml'
 
-import { ScheduleItem, ScheduleItemFromDb } from './types'
 import {
   getStreamerImageDict,
   getScheduleRef,
   setStreamerImageDict,
 } from "./util/db";
+import { ScheduleItem, ScheduleItemFromDb } from './types'
 
 function isSameTime(a: Date, b: Date) {
   return a.toUTCString() === b.toUTCString()

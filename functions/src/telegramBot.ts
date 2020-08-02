@@ -1,4 +1,5 @@
 import * as functions from "firebase-functions";
+
 import { getStreamerImageDict, addSubscription } from "./util/db";
 import { createBot } from "./util/bot";
 

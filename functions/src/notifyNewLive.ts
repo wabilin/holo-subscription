@@ -3,9 +3,9 @@ import { Telegram } from 'telegraf'
 import { LiveInfo } from 'holo-schedule'
 import * as moment from 'moment-timezone'
 
+import { getSubscriptionsRef } from './util/db'
 import { ScheduleItemFromDb, Subscription } from './types'
 import { getSecrets } from './util/secrets'
-import { getSubscriptionsRef } from './util/db'
 
 function liveInfoMessage(live: LiveInfo): string {
   const { streamer, guests, time, link } = live
