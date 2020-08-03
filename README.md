@@ -1,5 +1,5 @@
 # Holo Subscription
-![Build badge](https://github.com/wabilin/holo-subscription/workflows/Build/badge.svg)
+[![Build badge](https://github.com/wabilin/holo-subscription/workflows/Build/badge.svg)](https://github.com/wabilin/holo-subscription/actions?query=workflow%3ABuild)
 > はあちゃまっちゃま〜〜
 
 \[[中文](docs/zh-tw)\]
