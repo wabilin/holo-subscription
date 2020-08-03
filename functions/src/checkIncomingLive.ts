@@ -5,7 +5,8 @@ import { ScheduleItem } from './types'
 
 const checkIncomingLive = functions.pubsub.schedule('every 10 minutes').onRun(async (context) => {
   const now = new Date()
-  const halfHourLater = (new Date(now)).setMinutes(now.getMinutes() + 30)
+  // FIXME: 300 -> 30 after debug done
+  const halfHourLater = (new Date(now)).setMinutes(now.getMinutes() + 300)
   const ref = getScheduleRef().where('time', '>', now).where('time', '<', halfHourLater)
   const scheduleItems = await ref.get()
 
