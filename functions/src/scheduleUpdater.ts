@@ -20,13 +20,9 @@ function itemKey(live: LiveInfo) {
 const scheduleUpdater = functions.pubsub.schedule('every 1 hours').onRun(async (context) => {
   const html = await getScheduleHtml()
 
-
   const streamerImageDict = await getStreamerImageDict() || {}
   const { lives: allLives, dict } = parseScheduleHtml(html, streamerImageDict)
   await setStreamerImageDict(dict)
-
-  const names = Object.keys(dict)
-  functions.logger.log('Names in updated dict: ', names)
 
   const now = new Date()
   const scheduleRef = getScheduleRef();
