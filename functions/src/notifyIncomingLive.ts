@@ -9,7 +9,7 @@ import { getSecrets } from './util/secrets'
 function liveInfoMessage(live: LiveInfo): string {
   const { streamer, guests, time, link } = live
 
-  const minDiff = time.getMinutes() - (new Date()).getMinutes()
+  const minDiff = Math.floor((time.valueOf() - Date.now().valueOf()) / (1000 * 60))
 
   let msg = `${streamer} will start live in ${minDiff} minutes.`
   if (guests.length) {
