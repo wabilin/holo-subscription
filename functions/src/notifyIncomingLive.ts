@@ -10,7 +10,7 @@ import { listEndWith } from './util/format'
 function liveInfoMessage(live: LiveInfo): string {
   const { streamer, guests, time, link } = live
 
-  const minDiff = Math.floor((time.valueOf() - Date.now().valueOf()) / (1000 * 60))
+  const minDiff = Math.floor((time.valueOf() - Date.now()) / (1000 * 60))
 
   let msg = `${streamer} will start live in ${minDiff} minutes.`
   if (guests.length) {
