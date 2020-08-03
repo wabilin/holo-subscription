@@ -1,3 +1,4 @@
+import { StreamerImageDict } from 'holo-schedule'
 import admin = require('firebase-admin');
 admin.initializeApp();
 import { Subscription } from "../types";
@@ -8,12 +9,21 @@ export function getFirestore() {
   return admin.firestore();
 }
 
+interface StreamerImagesDoc {
+  vtuber: string
+  img : string
+}
+
 export async function getStreamerImageDict() {
   const db = getFirestore()
-  const oldDictRef = db.collection('docs').doc('streamerImageDict');
+  const snapshot = await db.collection('streamerImages').get()
+  const dict: StreamerImageDict = {}
+  snapshot.forEach(x => {
+    const { vtuber, img } = (x.data() as StreamerImageDict)
+    dict[vtuber] = img
+  });
 
-  const doc = await oldDictRef.get()
-  return doc.data()
+  return dict
 }
 
 export async function setStreamerImageDict(dict: Record<string, string>): Promise<void> {
@@ -21,7 +31,8 @@ export async function setStreamerImageDict(dict: Record<string, string>): Promis
   const batch = db.batch()
   const ref = db.collection('streamerImages')
   Object.entries(dict).forEach(([vtuber, img]) => {
-    batch.set(ref.doc(vtuber), { vtuber, img })
+    const doc: StreamerImagesDoc = { vtuber, img }
+    batch.set(ref.doc(vtuber), doc)
   })
 
   await batch.commit()
