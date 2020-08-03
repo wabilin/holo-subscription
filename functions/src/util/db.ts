@@ -91,6 +91,10 @@ interface IncomingNotification {
 }
 
 export async function createIncomingNotifications(lives: LiveInfo[]) {
+  if (lives.length === 0) {
+    return
+  }
+
   const db = getFirestore()
   const ref = db.collection('incomingNotifications')
 
