@@ -73,7 +73,7 @@ function webhookBot() {
     const vtuber = text.trim().split(/\s+/)[1];
 
     if (!vtuber) {
-      const buttons = VTUBERS.map(name => `+${name}`).concat(['Abort'])
+      const buttons = VTUBERS.map(name => `+${name}`).concat(['Do later'])
       const keyboard = Markup.keyboard(buttons, { columns: 3 }).oneTime().extra()
 
       return ctx.reply('Who would you like to subscribe?', keyboard)
@@ -100,7 +100,7 @@ function webhookBot() {
 
     const vtubers = await getSubscribedVtubers(chat.id)
 
-    const buttons = vtubers.map(name => `-${name}`).concat(['Abort'])
+    const buttons = vtubers.map(name => `-${name}`).concat(['Do later'])
     const keyboard = Markup.keyboard(buttons, { columns: 3 }).oneTime().extra()
 
     return ctx.reply('Who would you like to unsubscribe?', keyboard)
@@ -112,8 +112,8 @@ function webhookBot() {
     return unsubscribe(ctx, vtuber)
   })
 
-  bot.hears('Abort', (ctx) => {
-    return ctx.reply(`Abort`, Markup.removeKeyboard().extra());
+  bot.hears('Do later', (ctx) => {
+    return ctx.reply('👌', Markup.removeKeyboard().extra());
   })
 
   return bot;
