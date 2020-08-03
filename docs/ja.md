@@ -2,16 +2,16 @@
 ![Build badge](https://github.com/wabilin/holo-subscription/workflows/Build/badge.svg)
 > はあちゃまっちゃま〜〜
 
-Hololive 非公式サブスクリプション Telegram ボット.
+Hololive 非公式サブスクリプション Telegram ボット
 
 [https://t.me/holo_subscribe_bot](https://t.me/holo_subscribe_bot) でスタート！
 
 ## コマンド
 
 - `/subscribe` - 購読する
-- `/subscribe {name}` - お名前で購読する、 例：`/subscribe 赤井はあと`.
+- `/subscribe {name}` - お名前で購読する、 例：`/subscribe 赤井はあと`
 - `/unsubscribe` - 購読を取り消す
-- `/haaton` - はあちゃまっちゃま~.
+- `/haaton` - はあちゃまっちゃま~
 
 ## フィードバック
 [GitHub Issues](https://github.com/wabilin/holo-subscription/issues)で、フィードバック大歓迎！
