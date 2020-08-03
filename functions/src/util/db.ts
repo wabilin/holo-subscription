@@ -1,7 +1,7 @@
 import { StreamerImageDict, LiveInfo } from 'holo-schedule'
 import admin = require('firebase-admin');
 admin.initializeApp();
-import { Subscription } from "../types";
+import { Subscription, IncomingNotification, IncomingNotificationFromDb } from "../types";
 
 const SUBSCRIPTIONS = 'subscriptions'
 
@@ -85,11 +85,6 @@ export function getScheduleRef() {
   return db.collection('schedule');
 }
 
-interface IncomingNotification {
-  sent: boolean
-  liveId: string
-}
-
 export async function createIncomingNotifications(lives: LiveInfo[]) {
   if (lives.length === 0) {
     return
@@ -102,7 +97,7 @@ export async function createIncomingNotifications(lives: LiveInfo[]) {
   const currentNotifications = await ref.where('liveId', 'in', liveIds).get()
   const currentNotificationsSet = new Set()
   currentNotifications.forEach(x => {
-    const doc = x.data() as IncomingNotification
+    const doc = x.data() as IncomingNotificationFromDb
     currentNotificationsSet.add(doc.liveId)
   })
 
@@ -110,9 +105,14 @@ export async function createIncomingNotifications(lives: LiveInfo[]) {
   lives.forEach(async (live) => {
     const liveId = liveKey(live)
     const docRef = ref.doc(liveId)
+    const data: IncomingNotification = {
+      liveId,
+      sent: false,
+      created: new Date(),
+    };
 
     if (!currentNotificationsSet.has(liveId)) {
-      batch.set(docRef, { sent: false, liveId });
+      batch.set(docRef, data);
     }
   })
 

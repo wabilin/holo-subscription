@@ -11,3 +11,13 @@ export interface Subscription {
   vtuber: string
   chatId: number
 }
+
+export interface IncomingNotification {
+  sent: boolean
+  liveId: string
+  created: Date
+}
+
+export interface IncomingNotificationFromDb extends Omit<IncomingNotification, 'created'> {
+  created: firestore.Timestamp
+}
