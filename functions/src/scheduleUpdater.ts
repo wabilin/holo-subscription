@@ -3,9 +3,9 @@ import parseScheduleHtml from 'holo-schedule'
 import getScheduleHtml from 'holo-schedule/lib/getScheduleHtml'
 
 import {
-  liveKey,
   getStreamerImageDict,
   getScheduleRef,
+  updateSchedule,
   setStreamerImageDict,
 } from "./util/db";
 import { ScheduleItem, ScheduleItemFromDb } from './types'
@@ -41,12 +41,7 @@ const scheduleUpdater = functions.pubsub.schedule('every 3 hours').onRun(async (
       return !stored || !isSameTime(x.time, stored.time)
     })
 
-  const updatePromises = lives.map(live => {
-    return scheduleRef.doc(liveKey(live)).set(live)
-  })
-  await Promise.all(updatePromises)
-
-  return null;
+  return updateSchedule(lives)
 });
 
 export default scheduleUpdater

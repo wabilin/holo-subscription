@@ -85,6 +85,23 @@ export function getScheduleRef() {
   return db.collection('schedule');
 }
 
+export async function updateSchedule(lives: LiveInfo[]) {
+  if (lives.length === 0) {
+    return
+  }
+
+  const db = getFirestore()
+  const scheduleRef = getScheduleRef()
+
+  const batch = db.batch()
+
+  lives.forEach(live => {
+    batch.set(scheduleRef.doc(liveKey(live)), live)
+  })
+
+  await batch.commit()
+}
+
 export async function createIncomingNotifications(lives: LiveInfo[]) {
   if (lives.length === 0) {
     return
