@@ -7,8 +7,12 @@ import {
   getSubscribedVtubers,
   removeSubscription,
 } from "./util/db";
+import ipCheck from './util/ipCheck'
 import { createBot } from "./util/bot";
 import { VTUBERS } from './util/constants'
+
+const ALLOW_LIST = ['149.154.160.0/20', '91.108.4.0/22']
+const isAllowedIp = (ip: string) => ALLOW_LIST.some(allow => ipCheck(allow, ip))
 
 async function getVtuberList() {
   const dict = await getStreamerImageDict();
@@ -143,6 +147,12 @@ function webhookBot() {
 }
 
 const telegramBot = functions.https.onRequest(async (request, response) => {
+  if (!isAllowedIp(request.ip)) {
+    const msg = `Telegram bot called from invalid IP: ${request.ip}`
+    functions.logger.warn(msg)
+    throw new Error(msg)
+  }
+
   const bot = webhookBot();
   // Catch all workaround
   bot.on("message", (ctx) => {
