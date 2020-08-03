@@ -2,7 +2,13 @@
 ![Build badge](https://github.com/wabilin/holo-subscription/workflows/Build/badge.svg)
 > はあちゃまっちゃま〜〜
 
+\[[English](https://wabilin.github.io/holo-subscription/)\] | \[[中文](https://wabilin.github.io/holo-subscription/docs/zh-tw)\] | \[[日本語](https://wabilin.github.io/holo-subscription/docs/ja)\]
+
 訂閱 Hololive 用，非官方 Telegram Bot。
+
+✨可接收來賓情報。
+
+例如訂閱心心的話，心心參加公主頻道時，心豚也會收到通知 ♥️
 
 點擊 [https://t.me/holo_subscribe_bot](https://t.me/holo_subscribe_bot) 開始!
 

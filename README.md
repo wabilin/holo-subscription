@@ -2,9 +2,11 @@
 [![Build badge](https://github.com/wabilin/holo-subscription/workflows/Build/badge.svg)](https://github.com/wabilin/holo-subscription/actions?query=workflow%3ABuild)
 > はあちゃまっちゃま〜〜
 
-\[[中文](docs/zh-tw)\] | \[[日本語](docs/ja)\]
+\[[English](https://wabilin.github.io/holo-subscription/)\] | \[[中文](https://wabilin.github.io/holo-subscription/docs/zh-tw)\] | \[[日本語](https://wabilin.github.io/holo-subscription/docs/ja)\]
 
 Unofficial Telegram Bot to subscribe Hololive lives.
+
+✨Can get notification even when the one you subscribed join some live as a guest!
 
 Click [https://t.me/holo_subscribe_bot](https://t.me/holo_subscribe_bot) to start!
 
