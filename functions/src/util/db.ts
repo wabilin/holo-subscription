@@ -20,7 +20,7 @@ export async function setStreamerImageDict(dict: Record<string, string>): Promis
   const db = getFirestore()
   const batch = db.batch()
   const ref = db.collection('streamerImages')
-  Object.keys(dict).forEach(([vtuber, img]) => {
+  Object.entries(dict).forEach(([vtuber, img]) => {
     batch.set(ref.doc(vtuber), { vtuber, img })
   })
 
