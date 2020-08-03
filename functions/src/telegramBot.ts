@@ -68,7 +68,7 @@ function webhookBot() {
     const message =
      'Thanks for using **Holo Subscription!** \n\n' +
      'Use `/subscribe` to subscribe vtubers.\n' +
-     'Use `/help` or visit our [homepage](https://github.com/wabilin/holo-subscription) for more information.'
+     'Use `/help` or visit our [homepage](https://wabilin.github.io/holo-subscription/) for more information.'
 
     return ctx.replyWithMarkdown(message)
   });
@@ -81,7 +81,7 @@ function webhookBot() {
      '`/subscribe 赤井はあと`.\n' +
      '`/unsubscribe` - Unsubscribe`.\n' +
      '`/haaton` - はあちゃまっちゃま~`.\n\n' +
-     'Visit our [homepage](https://github.com/wabilin/holo-subscription)' +
+     'Visit our [homepage](https://wabilin.github.io/holo-subscription/)' +
      ' for more information, including manual in 日本語 and 中文.\n' +
      'Feedbacks and contributing are welcome!🚀'
 
