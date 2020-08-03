@@ -1,9 +1,13 @@
-import { StreamerImageDict } from 'holo-schedule'
+import { StreamerImageDict, LiveInfo } from 'holo-schedule'
 import admin = require('firebase-admin');
 admin.initializeApp();
 import { Subscription } from "../types";
 
 const SUBSCRIPTIONS = 'subscriptions'
+
+export function liveKey(live: LiveInfo) {
+  return live.link.replace('https://www.youtube.com/watch?v=', '')
+}
 
 export function getFirestore() {
   return admin.firestore();
@@ -79,4 +83,23 @@ export function getSubscriptionsRef() {
 export function getScheduleRef() {
   const db = getFirestore()
   return db.collection('schedule');
+}
+
+export async function createIncomingNotifications(lives: LiveInfo[]) {
+  const db = getFirestore()
+  const batch = db.batch()
+  const ref = db.collection('incomingNotification')
+
+  lives.forEach(async (live) => {
+    const liveId = liveKey(live)
+    const docRef = ref.doc(liveId)
+
+    // TODO: Reduce queries
+    const currentDoc = await docRef.get()
+    if (!currentDoc.exists) {
+      batch.set(docRef, { sent: false, liveId });
+    }
+  })
+
+  await batch.commit()
 }

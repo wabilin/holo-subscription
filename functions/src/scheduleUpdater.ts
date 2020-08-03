@@ -1,8 +1,9 @@
 import * as functions from 'firebase-functions';
-import parseScheduleHtml, { LiveInfo } from 'holo-schedule'
+import parseScheduleHtml from 'holo-schedule'
 import getScheduleHtml from 'holo-schedule/lib/getScheduleHtml'
 
 import {
+  liveKey,
   getStreamerImageDict,
   getScheduleRef,
   setStreamerImageDict,
@@ -11,10 +12,6 @@ import { ScheduleItem, ScheduleItemFromDb } from './types'
 
 function isSameTime(a: Date, b: Date) {
   return a.toUTCString() === b.toUTCString()
-}
-
-function itemKey(live: LiveInfo) {
-  return live.link.replace('https://www.youtube.com/watch?v=', '')
 }
 
 const scheduleUpdater = functions.pubsub.schedule('every 1 hours').onRun(async (context) => {
@@ -45,7 +42,7 @@ const scheduleUpdater = functions.pubsub.schedule('every 1 hours').onRun(async (
     })
 
   const updatePromises = lives.map(live => {
-    return scheduleRef.doc(itemKey(live)).set(live)
+    return scheduleRef.doc(liveKey(live)).set(live)
   })
   await Promise.all(updatePromises)
 
