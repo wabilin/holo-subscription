@@ -4,7 +4,7 @@
 
 訂閱 Hololive 用，非官方 Telegram Bot。
 
-點擊 https://t.me/holo_subscribe_bot 開始!
+點擊 [https://t.me/holo_subscribe_bot](https://t.me/holo_subscribe_bot) 開始!
 
 ## 可用指令
 
