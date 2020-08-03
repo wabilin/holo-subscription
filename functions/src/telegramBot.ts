@@ -83,9 +83,10 @@ function webhookBot() {
      '`/subscribe` - Subscribe with menu.\n' +
      '`/subscribe {name}` - Subscribe with name, for example, `/subscribe 赤井はあと`.\n' +
      '`/unsubscribe` - Unsubscribe with menu`.\n' +
-     '`/haaton` - はあちゃまっちゃま〜`.\n\n' +
+     '`/haaton` - はあちゃまっちゃま〜♥️`.\n\n' +
      'Visit our [homepage](https://github.com/wabilin/holo-subscription)' +
-     ' for more information, including manual in 日本語 and 中文.\nFeedbacks are welcome!'
+     ' for more information, including manual in 日本語 and 中文.\n' +
+     'Feedbacks and contributing are welcome!🚀'
 
     return ctx.replyWithMarkdown(message)
   })
