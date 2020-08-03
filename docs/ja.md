@@ -2,8 +2,6 @@
 ![Build badge](https://github.com/wabilin/holo-subscription/workflows/Build/badge.svg)
 > はあちゃまっちゃま〜〜
 
-\[[中文](zh-tw)\]
-
 Unofficial Telegram Bot to subscribe Hololive lives.
 
 Click https://t.me/holo_subscribe_bot to start!

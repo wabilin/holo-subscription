@@ -2,22 +2,19 @@
 ![Build badge](https://github.com/wabilin/holo-subscription/workflows/Build/badge.svg)
 > はあちゃまっちゃま〜〜
 
-\[[中文](zh-tw)\]
+訂閱 Hololive 用，非官方 Telegram Bot。
 
-Unofficial Telegram Bot to subscribe Hololive lives.
+點擊 https://t.me/holo_subscribe_bot 開始!
 
-Click https://t.me/holo_subscribe_bot to start!
+## 可用指令
 
-## Commands
+- `/subscribe` - 訂閱
+- `/subscribe {name}` - 直接輸入名字以訂閱，例如： `/subscribe 赤井はあと`.
+- `/unsubscribe` - 取消訂閱
+- `/haaton` - はあちゃまっちゃま
 
-- `/subscribe` - Subscribe.
-- `/subscribe {name}` - Subscribe with name, for example, `/subscribe 赤井はあと`.
-- `/unsubscribe` - Unsubscribe.
-- `/haaton` - はあちゃまっちゃま~.
-
-## Feedback
-Feedbacks are welcome!
-Please visit [GitHub Issues](https://github.com/wabilin/holo-subscription/issues).
+## 意見回饋
+有任何問題或意見，歡迎在 [GitHub Issues](https://github.com/wabilin/holo-subscription/issues) 提出。
 
 ## Screenshots
 
