@@ -65,13 +65,7 @@ function webhookBot() {
     const chatId = ctx.chat?.id;
     functions.logger.log(`Test command from chatId: ${chatId}`);
 
-    const time = new Date()
-    const times = "Current Time:"
-      + `IOS: ${time.toISOString()}`
-      + `UTC: ${time.toUTCString()}`
-      + `Locale : ${time.toLocaleString()}`
-
-    return ctx.reply(times);
+    return ctx.reply(`**Testing** echo: ${ctx.message?.text}`);
   });
 
   bot.command("subscribe", async (ctx) => {
