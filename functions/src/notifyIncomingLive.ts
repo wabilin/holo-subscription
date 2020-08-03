@@ -5,6 +5,7 @@ import { LiveInfo } from 'holo-schedule'
 import { getSubscriptionsRef, getScheduleRef } from './util/db'
 import { Subscription, ScheduleItemFromDb } from './types'
 import { getSecrets } from './util/secrets'
+import { listEndWith } from './util/format'
 
 function liveInfoMessage(live: LiveInfo): string {
   const { streamer, guests, time, link } = live
@@ -13,7 +14,7 @@ function liveInfoMessage(live: LiveInfo): string {
 
   let msg = `${streamer} will start live in ${minDiff} minutes.`
   if (guests.length) {
-    msg += `\nGuests: ${guests.join(', ')}`
+    msg += `\nGuests: ${listEndWith(guests, 'and')}`
   }
   msg += `\n${link}`
 

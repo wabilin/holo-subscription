@@ -6,6 +6,7 @@ import * as moment from 'moment-timezone'
 import { getSubscriptionsRef } from './util/db'
 import { ScheduleItemFromDb, Subscription } from './types'
 import { getSecrets } from './util/secrets'
+import { listEndWith } from './util/format'
 
 function liveInfoMessage(live: LiveInfo): string {
   const { streamer, guests, time, link } = live
@@ -15,7 +16,7 @@ function liveInfoMessage(live: LiveInfo): string {
 
   let msg = `${streamer} will start live at ${formattedTime}`
   if (guests.length) {
-    msg += `\nGuests: ${guests.join(', ')}`
+    msg += `\nGuests: ${listEndWith(guests, 'and')}`
   }
   msg += `\n${link}`
 
