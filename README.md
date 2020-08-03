@@ -8,7 +8,7 @@ Unofficial Telegram Bot to subscribe Hololive lives.
 
 ✨Can get notification even when the one you subscribed join some live as a guest!
 
-Click [https://t.me/holo_subscribe_bot](https://t.me/holo_subscribe_bot) to start!
+🚀Click [https://t.me/holo_subscribe_bot](https://t.me/holo_subscribe_bot) to start!
 
 ## Commands
 

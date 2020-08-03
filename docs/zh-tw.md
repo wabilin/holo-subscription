@@ -6,11 +6,9 @@
 
 訂閱 Hololive 用，非官方 Telegram Bot。
 
-✨可接收來賓情報。
+✨可接收來賓情報。例如訂閱心心的話，心心參加公主頻道時，心豚也會收到通知 ♥️
 
-例如訂閱心心的話，心心參加公主頻道時，心豚也會收到通知 ♥️
-
-點擊 [https://t.me/holo_subscribe_bot](https://t.me/holo_subscribe_bot) 開始!
+🚀點擊 [https://t.me/holo_subscribe_bot](https://t.me/holo_subscribe_bot) 開始!
 
 ## 可用指令
 

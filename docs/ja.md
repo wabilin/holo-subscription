@@ -6,11 +6,9 @@
 
 Hololive 非公式サブスクリプション Telegram ボット
 
-✨ゲスト情報もある！
+✨ゲスト情報もある！例えば、はあちゃまがゲストとしてルーナの生放送を参加する時、はあとん達は通知を受けます♥️！
 
-例えば、はあちゃまがゲストとしてルーナの生放送を参加する時、はあとん達は通知を受けます♥️！
-
-[https://t.me/holo_subscribe_bot](https://t.me/holo_subscribe_bot) でスタート！
+🚀[https://t.me/holo_subscribe_bot](https://t.me/holo_subscribe_bot) でスタート！
 
 ## コマンド
 
