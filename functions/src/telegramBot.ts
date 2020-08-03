@@ -68,6 +68,28 @@ function webhookBot() {
     return ctx.reply(`**Testing** echo: ${ctx.message?.text}`);
   });
 
+  bot.command("start", async (ctx) => {
+    const message =
+     'Thanks for using **Holo Subscription!** \n\n' +
+     'Use `/subscribe` to subscribe vtubers.\n' +
+     'Use `/help` or visit our [homepage](https://github.com/wabilin/holo-subscription) for more information.'
+
+    return ctx.replyWithMarkdown(message)
+  })
+
+  bot.command("help", async (ctx) => {
+    const message =
+     'Available commands:\n' +
+     '`/subscribe` - Subscribe with menu.\n' +
+     '`/subscribe {name}` - Subscribe with name, for example, `/subscribe 赤井はあと`.\n' +
+     '`/unsubscribe` - Unsubscribe with menu`.\n' +
+     '`/haaton` - はあちゃまっちゃま〜`.\n\n' +
+     'Visit our [homepage](https://github.com/wabilin/holo-subscription)' +
+     ' for more information, including manual in 日本語 and 中文.\nFeedbacks are welcome!'
+
+    return ctx.replyWithMarkdown(message)
+  })
+
   bot.command("subscribe", async (ctx) => {
     const text = ctx.message?.text || "";
     const vtuber = text.trim().split(/\s+/)[1];
