@@ -85,18 +85,29 @@ export function getScheduleRef() {
   return db.collection('schedule');
 }
 
+interface IncomingNotification {
+  sent: boolean
+  liveId: string
+}
+
 export async function createIncomingNotifications(lives: LiveInfo[]) {
   const db = getFirestore()
-  const batch = db.batch()
-  const ref = db.collection('incomingNotification')
+  const ref = db.collection('incomingNotifications')
 
+  const liveIds = lives.map(x => liveKey(x))
+  const currentNotifications = await ref.where('liveId', 'in', liveIds).get()
+  const currentNotificationsSet = new Set()
+  currentNotifications.forEach(x => {
+    const doc = x.data() as IncomingNotification
+    currentNotificationsSet.add(doc.liveId)
+  })
+
+  const batch = db.batch()
   lives.forEach(async (live) => {
     const liveId = liveKey(live)
     const docRef = ref.doc(liveId)
 
-    // TODO: Reduce queries
-    const currentDoc = await docRef.get()
-    if (!currentDoc.exists) {
+    if (!currentNotificationsSet.has(liveId)) {
       batch.set(docRef, { sent: false, liveId });
     }
   })
