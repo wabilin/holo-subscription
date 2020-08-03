@@ -2,6 +2,10 @@ name: Check Build
 
 on: [push, pull_request]
 
+defaults:
+    run:
+      working-directory: functions
+
 jobs:
   build:
 
@@ -18,7 +22,6 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
 
-    - run: cd functions
     - run: npm install
     - run: npm run lint
     - run: npm run test
