@@ -19,8 +19,12 @@ Click https://t.me/holo_subscribe_bot to start!
 Feedbacks are welcome!
 Please visit [GitHub Issues](https://github.com/wabilin/holo-subscription/issues).
 
-## Screenshots
+## Contributing
+Pull requests are welcome!
 
+See [holo-schedule](https://github.com/wabilin/holo-schedule/) if you are looking for the website crawler.
+
+## Screenshots
 ![IMG_9468](https://user-images.githubusercontent.com/2549826/89192999-4d084680-d5e0-11ea-935f-fdbf5e78ae42.jpg)
 
 ![IMG_9470](https://user-images.githubusercontent.com/2549826/89193027-55f91800-d5e0-11ea-9f5b-5b1f237cc47b.jpg)
