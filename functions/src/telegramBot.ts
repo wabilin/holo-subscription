@@ -104,9 +104,7 @@ function webhookBot() {
     return ctx.reply(`Current subscriptions: ${listStr}`)
   })
 
-  bot.command("haaton", async (ctx) => {
-    return subscribe(ctx, '赤井はあと')
-  });
+  bot.command("haaton", (ctx) => subscribe(ctx, '赤井はあと'));
 
   // Subscribe with format "+Name"
   bot.hears(/^\+(.+)/, (ctx) => {
