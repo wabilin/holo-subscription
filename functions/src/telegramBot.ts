@@ -64,17 +64,20 @@ function webhookBot() {
   });
 
   bot.help(async (ctx) => {
+    functions.logger.log('Command Help')
     const message =
      'Available commands:\n' +
-     '`/subscribe` - Subscribe.\n' +
+     '`/subscribe` - Subscribe\n' +
      '`/subscribe {name}` - Subscribe with name, for example,\n' +
-     '`/subscribe 赤井はあと`.\n' +
-     '`/unsubscribe` - Unsubscribe`.\n' +
-     '`/list` - List your subscriptions`.\n' +
-     '`/haaton` - はあちゃまっちゃま~`.\n\n' +
+     '`/subscribe 赤井はあと`\n' +
+     '`/unsubscribe` - Unsubscribe`\n' +
+     '`/list` - List your subscriptions`\n' +
+     '`/haaton` - はあちゃまっちゃま~`\n\n' +
      'Visit our [homepage](https://wabilin.github.io/holo-subscription/)' +
-     ' for more information, including manual in 日本語 and 中文.\n' +
+     ' for more information, including manual in 日本語 and 中文\n' +
      'Feedbacks and contributing are welcome!🚀'
+
+     functions.logger.log('message', message)
 
     return ctx.replyWithMarkdown(message)
   })
