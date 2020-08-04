@@ -6,6 +6,7 @@ import { getSubscriptionsRef, getLive } from './util/db'
 import { Subscription } from './types'
 import { getSecrets } from './util/secrets'
 import { listEndWith } from './util/format'
+import { INCOMING_NOTIFICATIONS } from './util/dbCollections'
 
 function liveInfoMessage(live: LiveInfo): string {
   const { streamer, guests, time, link } = live
@@ -48,7 +49,7 @@ async function notifyForLive (live: LiveInfo) {
   functions.logger.log(`${jobs.length} notifications send.`)
 }
 
-const notifyIncomingLive = functions.firestore.document("incomingNotifications/{key}").onCreate(async (change, context) => {
+const notifyIncomingLive = functions.firestore.document(`${INCOMING_NOTIFICATIONS}/{key}`).onCreate(async (change, context) => {
   const liveId = context.params.key
   const live = await getLive(liveId)
 

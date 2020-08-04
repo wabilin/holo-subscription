@@ -8,7 +8,13 @@ import {
   ScheduleItemFromDb,
 } from "../types";
 
-const SUBSCRIPTIONS = 'subscriptions'
+import {
+  SUBSCRIPTIONS,
+  STREAMER_IMAGES,
+  SCHEDULE,
+  INCOMING_NOTIFICATIONS,
+} from './dbCollections'
+
 
 export function liveKey(live: LiveInfo) {
   return live.link.replace('https://www.youtube.com/watch?v=', '')
@@ -25,7 +31,7 @@ interface StreamerImagesDoc {
 
 export async function getStreamerImageDict() {
   const db = getFirestore()
-  const snapshot = await db.collection('streamerImages').get()
+  const snapshot = await db.collection(STREAMER_IMAGES).get()
   const dict: StreamerImageDict = {}
   snapshot.forEach(x => {
     const { vtuber, img } = (x.data() as StreamerImageDict)
@@ -38,7 +44,7 @@ export async function getStreamerImageDict() {
 export async function setStreamerImageDict(dict: Record<string, string>): Promise<void> {
   const db = getFirestore()
   const batch = db.batch()
-  const ref = db.collection('streamerImages')
+  const ref = db.collection(STREAMER_IMAGES)
   Object.entries(dict).forEach(([vtuber, img]) => {
     const doc: StreamerImagesDoc = { vtuber, img }
     batch.set(ref.doc(vtuber), doc)
@@ -87,7 +93,7 @@ export function getSubscriptionsRef() {
 
 export function getScheduleRef() {
   const db = getFirestore()
-  return db.collection('schedule');
+  return db.collection(SCHEDULE);
 }
 
 export async function getLive(liveId: string): Promise<LiveInfo> {
@@ -127,7 +133,7 @@ export async function createIncomingNotifications(lives: LiveInfo[]) {
   }
 
   const db = getFirestore()
-  const ref = db.collection('incomingNotifications')
+  const ref = db.collection(INCOMING_NOTIFICATIONS)
 
   const liveIds = lives.map(x => liveKey(x))
   const currentNotifications = await ref.where('liveId', 'in', liveIds).get()

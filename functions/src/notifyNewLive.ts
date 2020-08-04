@@ -7,6 +7,7 @@ import { getSubscriptionsRef } from './util/db'
 import { ScheduleItemFromDb, Subscription } from './types'
 import { getSecrets } from './util/secrets'
 import { listEndWith } from './util/format'
+import { SCHEDULE } from './util/dbCollections'
 
 function liveInfoMessage(live: LiveInfo): string {
   const { streamer, guests, time, link } = live
@@ -48,7 +49,7 @@ async function notifyForLive (live: LiveInfo) {
   functions.logger.log(`${jobs.length} notifications send.`)
 }
 
-const notifyNewLive = functions.firestore.document("schedule/{key}").onWrite(async (change, context) => {
+const notifyNewLive = functions.firestore.document(`${SCHEDULE}/{key}`).onWrite(async (change, context) => {
   const item = change.after.data() as ScheduleItemFromDb
 
   // it's data delete event
