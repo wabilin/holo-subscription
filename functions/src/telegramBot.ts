@@ -130,10 +130,6 @@ function webhookBot() {
     return ctx.reply('Who would you like to unsubscribe?', keyboard)
   })
 
-  bot.command('test', (ctx) => {
-    return ctx.replyWithMarkdown('TEST: **NAME 1** and *NAEM 2* `09:20` aaa.\n https://www.youtube.com/watch?v=95tktqHXwFQ')
-  })
-
   // Subscribe with format "+Name"
   bot.hears(/^\-(.+)/, (ctx) => {
     const vtuber = ctx.match && ctx.match[1] || 'unknown'
