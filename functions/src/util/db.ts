@@ -1,6 +1,9 @@
 import { StreamerImageDict, LiveInfo } from 'holo-schedule'
+import * as moment from 'moment-timezone'
+import * as functions from 'firebase-functions'
 import admin = require('firebase-admin');
 admin.initializeApp();
+
 import {
   Subscription,
   IncomingNotification,
@@ -127,13 +130,18 @@ export async function updateSchedule(lives: LiveInfo[]) {
   await batch.commit()
 }
 
+function getIncomingNotificationsRef() {
+  const db = getFirestore()
+  return db.collection(INCOMING_NOTIFICATIONS)
+}
+
 export async function createIncomingNotifications(lives: LiveInfo[]) {
   if (lives.length === 0) {
     return
   }
 
   const db = getFirestore()
-  const ref = db.collection(INCOMING_NOTIFICATIONS)
+  const ref = getIncomingNotificationsRef()
 
   const liveIds = lives.map(x => liveKey(x))
   const currentNotifications = await ref.where('liveId', 'in', liveIds).get()
@@ -158,4 +166,52 @@ export async function createIncomingNotifications(lives: LiveInfo[]) {
   })
 
   await batch.commit()
+}
+
+// useless function only for get typedef
+function uselessScheduleQuery() {
+  return getScheduleRef().where('time', '<', '')
+}
+
+type QueryRef = ReturnType<typeof uselessScheduleQuery>
+
+async function batchClear(queryRef: QueryRef) {
+  const db = getFirestore()
+  const batch = db.batch()
+
+  const snapshot = await queryRef.get();
+  const { size } = snapshot
+
+  if (size > 500) {
+    throw new Error(`Batch size too big: ${size}`)
+  }
+
+  // Ref https://firebase.google.com/docs/firestore/manage-data/delete-data
+  if (size > 300) {
+    functions.logger.warn(`Snapshot size getting huge (${size}). Should change batchClear way`)
+  }
+
+  snapshot.docs.forEach((doc) => {
+    batch.delete(doc.ref);
+  });
+  await batch.commit();
+}
+
+async function clearOldLives(beforeTime: Date) {
+  const scheduleRef = getScheduleRef().where('time', '<', beforeTime)
+  return batchClear(scheduleRef)
+}
+
+async function clearOldIncomingNotifications(beforeTime: Date) {
+  const notificationsRef = getIncomingNotificationsRef().where('created', '<', beforeTime)
+  return batchClear(notificationsRef)
+}
+
+export function clearOldDbData() {
+  const threeDaysAgo: Date = moment().subtract(3, 'days').toDate()
+
+  return Promise.all([
+    clearOldLives(threeDaysAgo),
+    clearOldIncomingNotifications(threeDaysAgo)
+  ])
 }
