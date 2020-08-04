@@ -9,7 +9,7 @@ import {
 import ipCheck from './util/ipCheck'
 import { createBot } from "./util/bot";
 import { VTUBERS } from './util/constants'
-import { listEndWith } from './util/format'
+import { markdownUl } from './util/format'
 
 const ALLOW_LIST = ['149.154.160.0/20', '91.108.4.0/22']
 const isAllowedIp = (ip: string) => ALLOW_LIST.some(allow => ipCheck(allow, ip))
@@ -99,9 +99,13 @@ function webhookBot() {
     }
 
     const vtubers = await getSubscribedVtubers(chat.id)
-    const listStr = listEndWith(vtubers, 'and')
+    if (vtubers.length === 0) {
+      return ctx.reply('No current subscriptions.')
+    }
 
-    return ctx.reply(`Current subscriptions: ${listStr}`)
+    const listStr = markdownUl(vtubers)
+
+    return ctx.replyWithMarkdown(`Current subscriptions:\n\n${listStr}`)
   })
 
   bot.command("haaton", (ctx) => subscribe(ctx, '赤井はあと'));
