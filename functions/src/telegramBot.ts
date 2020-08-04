@@ -2,7 +2,6 @@ import * as functions from "firebase-functions";
 import { Markup, Context } from 'telegraf'
 
 import {
-  getStreamerImageDict,
   addSubscription,
   getSubscribedVtubers,
   removeSubscription,
@@ -10,22 +9,13 @@ import {
 import ipCheck from './util/ipCheck'
 import { createBot } from "./util/bot";
 import { VTUBERS } from './util/constants'
+import { listEndWith } from './util/format'
 
 const ALLOW_LIST = ['149.154.160.0/20', '91.108.4.0/22']
 const isAllowedIp = (ip: string) => ALLOW_LIST.some(allow => ipCheck(allow, ip))
 
-async function getVtuberList() {
-  const dict = await getStreamerImageDict();
-  if (!dict) {
-    throw new Error('get dic failed')
-  }
-
-  return Object.keys(dict);
-}
-
 async function subscribe(ctx: Context, vtuber: string) {
-  const vtubers = await getVtuberList();
-  if (!vtubers.includes(vtuber)) {
+  if (!VTUBERS.includes(vtuber)) {
     return ctx.reply("Failed. Vtuber name not found.");
   }
 
@@ -101,6 +91,18 @@ function webhookBot() {
 
     return subscribe(ctx, vtuber)
   });
+
+  bot.command("list", async (ctx) => {
+    const { chat } = ctx
+    if (!chat) {
+      throw new Error('Can not get chat.')
+    }
+
+    const vtubers = await getSubscribedVtubers(chat.id)
+    const listStr = listEndWith(vtubers, 'and')
+
+    return ctx.reply(`Current subscriptions: ${listStr}`)
+  })
 
   bot.command("haaton", async (ctx) => {
     return subscribe(ctx, '赤井はあと')
