@@ -26,10 +26,12 @@ function liveInfoMessage(live: LiveInfo): string {
 async function notifyForLive (live: LiveInfo) {
   const { bot } = getSecrets()
   const tg = new Telegram(bot.token)
-  const { streamer, guests } = live
+  const { streamer, guests, link } = live
   const message = liveInfoMessage(live)
 
   const allVtubers = guests.concat([streamer])
+  functions.logger.log(`sending notification for ${link}`)
+  functions.logger.log('vtubers: ', allVtubers)
 
   const subscriptionsRef = getSubscriptionsRef()
 
@@ -43,6 +45,7 @@ async function notifyForLive (live: LiveInfo) {
   })
 
   await Promise.all(jobs)
+  functions.logger.log(`${jobs.length} notifications send.`)
 }
 
 const notifyNewLive = functions.firestore.document("schedule/{key}").onWrite(async (change, context) => {
