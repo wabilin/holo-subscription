@@ -56,7 +56,7 @@ function webhookBot() {
 
   bot.start(async (ctx) => {
     const message =
-     'Thanks for using **Holo Subscription!** \n\n' +
+     'Thanks for using *Holo Subscription!* \n\n' +
      'Use `/subscribe` to subscribe vtubers.\n' +
      'Use `/help` or visit our [homepage](https://wabilin.github.io/holo-subscription/) for more information.'
 
@@ -70,6 +70,7 @@ function webhookBot() {
      '`/subscribe {name}` - Subscribe with name, for example,\n' +
      '`/subscribe 赤井はあと`.\n' +
      '`/unsubscribe` - Unsubscribe`.\n' +
+     '`/list` - List your subscriptions`.\n' +
      '`/haaton` - はあちゃまっちゃま~`.\n\n' +
      'Visit our [homepage](https://wabilin.github.io/holo-subscription/)' +
      ' for more information, including manual in 日本語 and 中文.\n' +
