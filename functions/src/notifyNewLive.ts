@@ -1,13 +1,11 @@
 import * as functions from 'firebase-functions';
-import { Telegram } from 'telegraf'
 import { LiveInfo } from 'holo-schedule'
 import * as moment from 'moment-timezone'
 
-import { getSubscriptionsRef } from './util/db'
-import { ScheduleItemFromDb, Subscription } from './types'
-import { getSecrets } from './util/secrets'
+import { ScheduleItemFromDb } from './types'
 import { listEndWith } from './util/format'
 import { SCHEDULE } from './util/dbCollections'
+import { notifyForLive } from './util/messages'
 
 function liveInfoMessage(live: LiveInfo): string {
   const { streamer, guests, time, link } = live
@@ -24,41 +22,18 @@ function liveInfoMessage(live: LiveInfo): string {
   return msg
 }
 
-async function notifyForLive (live: LiveInfo) {
-  const { bot } = getSecrets()
-  const tg = new Telegram(bot.token)
-  const { streamer, guests, link } = live
-  const message = liveInfoMessage(live)
-
-  const allVtubers = guests.concat([streamer])
-  functions.logger.log(`sending notification for ${link}`)
-  functions.logger.log('vtubers: ', allVtubers)
-
-  const subscriptionsRef = getSubscriptionsRef()
-
-  const jobs: Promise<unknown>[] = []
-
-  // TODO: Do not send to an user more than once
-  const subscriptions = await subscriptionsRef.where('vtuber', 'in', allVtubers).get()
-  subscriptions.forEach(x => {
-    const subscription = x.data() as Subscription
-    jobs.push(tg.sendMessage(subscription.chatId, message))
-  })
-
-  await Promise.all(jobs)
-  functions.logger.log(`${jobs.length} notifications send.`)
-}
-
 const notifyNewLive = functions.firestore.document(`${SCHEDULE}/{key}`).onWrite(async (change, context) => {
   const item = change.after.data() as ScheduleItemFromDb
 
   // it's data delete event
   if (!item) { return }
 
-  await notifyForLive({
+  const live: LiveInfo = {
     ...item,
     time: item.time.toDate()
-  })
+  }
+
+  await notifyForLive(live, liveInfoMessage)
 })
 
 export default notifyNewLive;
