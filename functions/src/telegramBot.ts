@@ -14,6 +14,20 @@ import { markdownUl } from './util/format'
 const ALLOW_LIST = ['149.154.160.0/20', '91.108.4.0/22']
 const isAllowedIp = (ip: string) => ALLOW_LIST.some(allow => ipCheck(allow, ip))
 
+const HELP_MESSAGE = `
+🤖Available commands:
+/subscribe - Subscribe❤️
+/subscribe {name} - Subscribe with name, for example,
+/subscribe 赤井はあと
+/unsubscribe - Unsubscribe
+/list - List your subscriptions
+/haaton - はあちゃまっちゃま~
+
+Visit our https://wabilin.github.io/holo-subscription
+for more information, including manual in 日本語 and 中文
+Feedbacks and contributing are welcome!🚀
+`
+
 async function subscribe(ctx: Context, vtuber: string) {
   if (!VTUBERS.includes(vtuber)) {
     return ctx.reply("Failed. Vtuber name not found.");
@@ -63,25 +77,11 @@ function webhookBot() {
     return ctx.replyWithMarkdown(message)
   });
 
-  bot.help(async (ctx) => {
+  bot.help((ctx) => {
     functions.logger.log('Command Help')
-    const message =
-     'Available commands:\n' +
-     '`/subscribe` - Subscribe\n' +
-     '`/subscribe {name}` - Subscribe with name, for example,\n' +
-     '`/subscribe 赤井はあと`\n' +
-     '`/unsubscribe` - Unsubscribe`\n' +
-     '`/list` - List your subscriptions`\n' +
-     '`/haaton` - はあちゃまっちゃま~`\n\n' +
-     'Visit our [homepage](https://wabilin.github.io/holo-subscription/)' +
-     ' for more information, including manual in 日本語 and 中文\n' +
-     'Feedbacks and contributing are welcome!🚀'
-
-     functions.logger.log('[message]', message)
-
-     const returned = await ctx.replyWithMarkdown(message)
-     functions.logger.log('[returned]', returned)
+    return ctx.reply(HELP_MESSAGE)
   })
+
 
   bot.command("subscribe", async (ctx) => {
     const text = ctx.message?.text || "";
