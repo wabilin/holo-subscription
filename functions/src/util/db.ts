@@ -149,7 +149,6 @@ export async function createIncomingNotifications(lives: LiveInfo[]) {
     const docRef = ref.doc(liveId)
     const data: IncomingNotification = {
       liveId,
-      sent: false,
       created: new Date(),
     };
 

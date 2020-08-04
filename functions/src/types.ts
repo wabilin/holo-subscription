@@ -13,7 +13,6 @@ export interface Subscription {
 }
 
 export interface IncomingNotification {
-  sent: boolean
   liveId: string
   created: Date
 }
