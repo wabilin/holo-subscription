@@ -77,9 +77,10 @@ function webhookBot() {
      ' for more information, including manual in 日本語 and 中文\n' +
      'Feedbacks and contributing are welcome!🚀'
 
-     functions.logger.log('message', message)
+     functions.logger.log('[message]', message)
 
-    return ctx.replyWithMarkdown(message)
+     const returned = await ctx.replyWithMarkdown(message)
+     functions.logger.log('[returned]', returned)
   })
 
   bot.command("subscribe", async (ctx) => {
