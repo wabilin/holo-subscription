@@ -2,8 +2,8 @@ import * as functions from 'firebase-functions';
 import { Telegram } from 'telegraf'
 import { LiveInfo } from 'holo-schedule'
 
-import { getSubscriptionsRef, getScheduleRef } from './util/db'
-import { Subscription, ScheduleItemFromDb } from './types'
+import { getSubscriptionsRef, getLive } from './util/db'
+import { Subscription } from './types'
 import { getSecrets } from './util/secrets'
 import { listEndWith } from './util/format'
 
@@ -46,17 +46,9 @@ async function notifyForLive (live: LiveInfo) {
 
 const notifyIncomingLive = functions.firestore.document("incomingNotifications/{key}").onCreate(async (change, context) => {
   const liveId = context.params.key
+  const live = await getLive(liveId)
 
-  const data = (await getScheduleRef().doc(liveId).get()).data()
-  if (!data) {
-    throw new Error(`Can not get live with id: ${liveId}.`)
-  }
-  const item = data as ScheduleItemFromDb
-
-  await notifyForLive({
-    ...item,
-    time: item.time.toDate()
-  })
+  await notifyForLive(live)
 })
 
 export default notifyIncomingLive;

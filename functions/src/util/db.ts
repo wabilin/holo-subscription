@@ -1,7 +1,12 @@
 import { StreamerImageDict, LiveInfo } from 'holo-schedule'
 import admin = require('firebase-admin');
 admin.initializeApp();
-import { Subscription, IncomingNotification, IncomingNotificationFromDb } from "../types";
+import {
+  Subscription,
+  IncomingNotification,
+  IncomingNotificationFromDb,
+  ScheduleItemFromDb,
+} from "../types";
 
 const SUBSCRIPTIONS = 'subscriptions'
 
@@ -83,6 +88,20 @@ export function getSubscriptionsRef() {
 export function getScheduleRef() {
   const db = getFirestore()
   return db.collection('schedule');
+}
+
+export async function getLive(liveId: string): Promise<LiveInfo> {
+  const data = (await getScheduleRef().doc(liveId).get()).data()
+  if (!data) {
+    throw new Error(`Can not get live with id: ${liveId}.`)
+  }
+
+  const item = data as ScheduleItemFromDb
+
+  return {
+    ...item,
+    time: item.time.toDate()
+  }
 }
 
 export async function updateSchedule(lives: LiveInfo[]) {
