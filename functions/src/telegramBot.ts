@@ -23,7 +23,7 @@ const HELP_MESSAGE = `
 /list - List your subscriptions
 /haaton - はあちゃまっちゃま~
 
-Visit our https://wabilin.github.io/holo-subscription
+Visit https://wabilin.github.io/holo-subscription
 for more information, including manual in 日本語 and 中文
 Feedbacks and contributing are welcome!🚀
 `
