@@ -11,12 +11,11 @@ function liveInfoMessage(live: LiveInfo): string {
   const { streamer, guests, time, link } = live
 
   // use HH[時]mm[分] to avoid format like "18:00" becomes a video time link
-  const formattedTime = moment(time).tz('Asia/Tokyo').format('[`]MM/DD HH:mm[`] [(Japan)]')
+  const formattedTime = moment(time).tz('Asia/Tokyo').format('MM/DD HH[時]mm[分] [(Japan)]')
 
-  let msg = `*${streamer}* will start live at ${formattedTime}`
+  let msg = `${streamer} will start live at ${formattedTime}.`
   if (guests.length) {
-    const boldGuests = guests.map(x => `*${x}*`)
-    msg += `\nGuests: ${listEndWith(boldGuests, 'and')}`
+    msg += `\nGuests: ${listEndWith(guests, 'and')}`
   }
   msg += `\n${link}`
 

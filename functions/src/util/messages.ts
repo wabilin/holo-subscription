@@ -27,7 +27,7 @@ export async function notifyForLive(live: LiveInfo, buildMessage: BuildMessage) 
   const subscriptions = await subscriptionsRef.where('vtuber', 'in', allVtubers).get()
   subscriptions.forEach(x => {
     const { chatId } = x.data() as Subscription
-    jobs.push(telegram.sendMessage(chatId, message, { parse_mode: 'MarkdownV2' }))
+    jobs.push(telegram.sendMessage(chatId, message))
   })
 
   await Promise.all(jobs)
