@@ -18,9 +18,16 @@ import {
   INCOMING_NOTIFICATIONS,
 } from './dbCollections'
 
+function validKey(key: string) {
+  if (key.includes('/') || key.includes('.')) {
+    throw new Error(`Key: "${key}" is invalid`)
+  }
+  return key
+}
 
-export function liveKey(live: LiveInfo) {
-  return live.link.replace('https://www.youtube.com/watch?v=', '')
+export function liveKey(live: LiveInfo): string {
+  const ytHash = live.link.replace('https://www.youtube.com/watch?v=', '')
+  return validKey(ytHash)
 }
 
 export function getFirestore() {
@@ -50,14 +57,15 @@ export async function setStreamerImageDict(dict: Record<string, string>): Promis
   const ref = db.collection(STREAMER_IMAGES)
   Object.entries(dict).forEach(([vtuber, img]) => {
     const doc: StreamerImagesDoc = { vtuber, img }
-    batch.set(ref.doc(vtuber), doc)
+    const key = validKey(vtuber)
+    batch.set(ref.doc(key), doc)
   })
 
   await batch.commit()
 }
 
-function subscriptionKey(chatId: number, vtuber: string) {
-  return `${chatId}-${vtuber}`
+function subscriptionKey(chatId: number, vtuber: string): string {
+  return validKey(`${chatId}-${vtuber}`)
 }
 
 function subscriptionDoc(subscription: Subscription) {
