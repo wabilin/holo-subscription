@@ -15,6 +15,7 @@ Unofficial Telegram Bot to subscribe Hololive lives.
 - `/subscribe` - Subscribe.
 - `/subscribe {name}` - Subscribe with name, for example, `/subscribe 赤井はあと`.
 - `/unsubscribe` - Unsubscribe.
+- `/list` - List of subscriptions.
 - `/haaton` - はあちゃまっちゃま~.
 
 ## Feedback

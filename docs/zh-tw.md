@@ -15,6 +15,7 @@
 - `/subscribe` - 訂閱
 - `/subscribe {name}` - 直接輸入名字以訂閱，例如： `/subscribe 赤井はあと`.
 - `/unsubscribe` - 取消訂閱
+- `/list` - 已訂閱清單。
 - `/haaton` - はあちゃまっちゃま
 
 ## 意見回饋

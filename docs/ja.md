@@ -15,6 +15,7 @@ Hololive 非公式サブスクリプション Telegram ボット
 - `/subscribe` - 購読する
 - `/subscribe {name}` - お名前で購読する、 例：`/subscribe 赤井はあと`
 - `/unsubscribe` - 購読を取り消す
+- `/list` - 購読したリスト
 - `/haaton` - はあちゃまっちゃま~
 
 ## フィードバック
