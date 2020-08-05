@@ -28,6 +28,13 @@ for more information, including manual in 日本語 and 中文
 Feedbacks and contributing are welcome!🚀
 `
 
+const START_MARKDOWN = `
+Thanks for using *Holo Subscription!*
+
+Use /subscribe to subscribe vtubers.
+Use /help or visit [holo-subscription](https://wabilin.github.io/holo-subscription/) for more information.
+`;
+
 async function subscribe(ctx: Context, vtuber: string) {
   if (!VTUBERS.includes(vtuber)) {
     return ctx.reply("Failed. Vtuber name not found.");
@@ -69,12 +76,8 @@ function webhookBot() {
   const bot = createBot();
 
   bot.start(async (ctx) => {
-    const message =
-     'Thanks for using *Holo Subscription!* \n\n' +
-     'Use `/subscribe` to subscribe vtubers.\n' +
-     'Use `/help` or visit our [homepage](https://wabilin.github.io/holo-subscription/) for more information.'
-
-    return ctx.replyWithMarkdown(message)
+    functions.logger.log('Command Start')
+    return ctx.replyWithMarkdown(START_MARKDOWN)
   });
 
   bot.help((ctx) => {
@@ -84,6 +87,7 @@ function webhookBot() {
 
 
   bot.command("subscribe", async (ctx) => {
+    functions.logger.log('Command Subscribe')
     const text = ctx.message?.text || "";
     const vtuber = text.trim().split(/\s+/)[1];
 
@@ -98,6 +102,7 @@ function webhookBot() {
   });
 
   bot.command("list", async (ctx) => {
+    functions.logger.log('Command List')
     const { chat } = ctx
     if (!chat) {
       throw new Error('Can not get chat.')
@@ -113,15 +118,22 @@ function webhookBot() {
     return ctx.replyWithMarkdown(`Current subscriptions:\n\n${listStr}`)
   })
 
-  bot.command("haaton", (ctx) => subscribe(ctx, '赤井はあと'));
+  bot.command("haaton", (ctx) => {
+    functions.logger.log('Command Haaton')
+    return subscribe(ctx, '赤井はあと')
+  });
 
   // Subscribe with format "+Name"
   bot.hears(/^\+(.+)/, (ctx) => {
+    functions.logger.log('Hears "+" ', ctx.match)
+
     const vtuber = ctx.match && ctx.match[1] || 'unknown'
     return subscribe(ctx, vtuber)
   })
 
   bot.command('unsubscribe', async (ctx) => {
+    functions.logger.log('Command Unsubscribe')
+
     const { chat } = ctx;
     if (!chat) {
       throw new Error("Chat not found.");
@@ -137,11 +149,14 @@ function webhookBot() {
 
   // Subscribe with format "+Name"
   bot.hears(/^\-(.+)/, (ctx) => {
+    functions.logger.log('Hears "-" ', ctx.match)
+
     const vtuber = ctx.match && ctx.match[1] || 'unknown'
     return unsubscribe(ctx, vtuber)
   })
 
   bot.hears('Do later', (ctx) => {
+    functions.logger.log('Hears Do later')
     return ctx.reply('👌', Markup.removeKeyboard().extra());
   })
 
