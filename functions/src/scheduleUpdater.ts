@@ -13,7 +13,7 @@ function isSameTime(a: Date, b: Date) {
   return a.toUTCString() === b.toUTCString()
 }
 
-const scheduleUpdater = functions.pubsub.schedule('every 3 hours').onRun(async (context) => {
+const scheduleUpdater = functions.pubsub.schedule('every 1 hours').onRun(async (context) => {
   const html = await getScheduleHtml()
 
   const streamerImageDict = await getStreamerImageDict() || {}
