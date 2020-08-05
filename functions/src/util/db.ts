@@ -10,6 +10,7 @@ import {
   IncomingNotificationFromDb,
   ScheduleItemFromDb,
   UserConfig,
+  ScheduleItem,
 } from "../types";
 
 import {
@@ -107,6 +108,23 @@ export function getSubscriptionsRef() {
 export function getScheduleRef() {
   const db = getFirestore()
   return db.collection(SCHEDULE);
+}
+
+type Schedule = Record<string, ScheduleItem>
+export async function getStoredSchedule(before: Date): Promise<Schedule> {
+  const scheduleRef = getScheduleRef();
+  const snapshot = await scheduleRef.where('time', '>', before).get()
+
+  const storedSchedule: Schedule = {}
+  snapshot.forEach((x) => {
+    const item = x.data() as ScheduleItemFromDb
+    storedSchedule[item.link] = {
+      ...item,
+      time: item.time.toDate()
+    }
+  })
+
+  return storedSchedule
 }
 
 export async function getLive(liveId: string): Promise<LiveInfo> {
