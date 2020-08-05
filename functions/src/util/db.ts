@@ -9,6 +9,7 @@ import {
   IncomingNotification,
   IncomingNotificationFromDb,
   ScheduleItemFromDb,
+  UserConfig,
 } from "../types";
 
 import {
@@ -16,6 +17,7 @@ import {
   STREAMER_IMAGES,
   SCHEDULE,
   INCOMING_NOTIFICATIONS,
+  USER_CONFIGS,
 } from './dbCollections'
 
 function validKey(key: string) {
@@ -222,4 +224,19 @@ export function clearOldDbData() {
     clearOldLives(threeDaysAgo),
     clearOldIncomingNotifications(threeDaysAgo)
   ])
+}
+
+export async function createUserConfigIfNotExist(chatId: number) {
+  const config: UserConfig = {
+    chatId,
+    zone: 'Asia/Tokyo'
+  }
+  const db = getFirestore()
+  const key = validKey(String(chatId))
+  const docRef = db.collection(USER_CONFIGS).doc(key)
+
+  const currentDoc = await docRef.get()
+  if (!currentDoc.exists) {
+    await docRef.create(config)
+  }
 }

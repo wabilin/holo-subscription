@@ -5,6 +5,7 @@ import {
   addSubscription,
   getSubscribedVtubers,
   removeSubscription,
+  createUserConfigIfNotExist,
 } from "./util/db";
 import ipCheck from './util/ipCheck'
 import { createBot } from "./util/bot";
@@ -45,10 +46,12 @@ async function subscribe(ctx: Context, vtuber: string) {
     throw new Error("Chat not found.");
   }
 
-  await addSubscription({
-    vtuber,
-    chatId: chat.id,
-  });
+  const chatId = chat.id
+
+  await Promise.all([
+    createUserConfigIfNotExist(chatId),
+    addSubscription({ vtuber, chatId }),
+  ])
 
   return ctx.reply(`Subscribed ${vtuber} ❤️`, Markup.removeKeyboard().extra());
 }

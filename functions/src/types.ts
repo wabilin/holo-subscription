@@ -20,3 +20,8 @@ export interface IncomingNotification {
 export interface IncomingNotificationFromDb extends Omit<IncomingNotification, 'created'> {
   created: firestore.Timestamp
 }
+
+export interface UserConfig {
+  chatId: number
+  zone: string
+}
