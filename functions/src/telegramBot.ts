@@ -36,6 +36,8 @@ Use /subscribe to subscribe vtubers.
 Use /help or visit [holo-subscription](https://wabilin.github.io/holo-subscription/) for more information.
 `;
 
+let ignore: () => void
+
 async function subscribe(ctx: Context, vtuber: string) {
   if (!VTUBERS.includes(vtuber)) {
     return ctx.reply("Failed. Vtuber name not found.");
@@ -163,6 +165,11 @@ function webhookBot() {
     return ctx.reply('👌', Markup.removeKeyboard().extra());
   })
 
+  // Catch all workaround
+  bot.on("message", () => {
+    ignore()
+  });
+
   return bot;
 }
 
@@ -173,11 +180,9 @@ const telegramBot = functions.https.onRequest(async (request, response) => {
     throw new Error(msg)
   }
 
+  ignore = () => { response.status(200).end() }
+
   const bot = webhookBot();
-  // Catch all workaround
-  bot.on("message", (ctx) => {
-    response.status(200).end();
-  });
 
   try {
     await bot.handleUpdate(request.body, response);

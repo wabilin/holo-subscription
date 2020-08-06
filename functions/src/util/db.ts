@@ -244,17 +244,26 @@ export function clearOldDbData() {
   ])
 }
 
+function getUserConfigsRef() {
+  const db = getFirestore()
+  return db.collection(USER_CONFIGS)
+}
+
 export async function createUserConfigIfNotExist(chatId: number) {
   const config: UserConfig = {
     chatId,
     zone: 'Asia/Tokyo'
   }
-  const db = getFirestore()
   const key = validKey(String(chatId))
-  const docRef = db.collection(USER_CONFIGS).doc(key)
+  const docRef = getUserConfigsRef().doc(key)
 
   const currentDoc = await docRef.get()
   if (!currentDoc.exists) {
     await docRef.create(config)
   }
+}
+
+export function getAllUsersConfig() {
+  const configsRef = getUserConfigsRef()
+  return configsRef.get()
 }

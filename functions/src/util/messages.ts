@@ -1,16 +1,14 @@
 import * as functions from 'firebase-functions';
-import { Telegram } from 'telegraf'
 import { LiveInfo } from 'holo-schedule'
 
 import { getSubscriptionsRef } from './db'
-import { getSecrets } from './secrets'
 import { Subscription } from '../types'
+import { getTelegram } from './bot'
 
 type BuildMessage = (live: LiveInfo) => string
 
 export async function notifyForLive(live: LiveInfo, buildMessage: BuildMessage) {
-  const { bot } = getSecrets()
-  const telegram = new Telegram(bot.token)
+  const telegram = getTelegram()
 
   const { streamer, guests, link } = live
   const message = buildMessage(live)
