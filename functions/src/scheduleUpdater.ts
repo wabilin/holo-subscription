@@ -1,5 +1,5 @@
 import * as functions from 'firebase-functions';
-import parseScheduleHtml from 'holo-schedule'
+import parseScheduleHtml, { LiveInfo } from 'holo-schedule'
 import getScheduleHtml from 'holo-schedule/lib/getScheduleHtml'
 
 import {
@@ -11,6 +11,19 @@ import {
 
 function isSameTime(a: Date, b: Date) {
   return a.toUTCString() === b.toUTCString()
+}
+
+function shouldUpdate(storedLive: LiveInfo|undefined, fetchedLive: LiveInfo): boolean {
+  if (!storedLive) {
+    return true
+  }
+
+  const storedGuests = new Set(storedLive.guests)
+
+  return (
+    (!isSameTime(fetchedLive.time, storedLive.time)) ||
+    fetchedLive.guests.some(guest => !storedGuests.has(guest))
+  )
 }
 
 const scheduleUpdater = functions.pubsub.schedule('every 1 hours').onRun(async (context) => {
@@ -28,7 +41,7 @@ const scheduleUpdater = functions.pubsub.schedule('every 1 hours').onRun(async (
     .filter(x => x.time > now)
     .filter(x => {
       const stored = storedSchedule[x.link]
-      return !stored || !isSameTime(x.time, stored.time)
+      return shouldUpdate(stored, x)
     })
 
   return updateSchedule(lives)
