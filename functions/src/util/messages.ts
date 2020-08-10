@@ -27,9 +27,17 @@ export async function notifyForLive(live: LiveInfo, buildMessage: BuildMessage) 
     chatIdSet.add(chatId)
   })
 
-  const jobs: Promise<unknown>[] = [...chatIdSet].map(chatId => (
-    telegram.sendMessage(chatId, message)
-  ))
+  const jobs: Promise<unknown>[] = [...chatIdSet].map(async (chatId) => {
+    try {
+      await telegram.sendMessage(chatId, message)
+    } catch(error) {
+      if (error.message.includes("Forbidden: bot was blocked by the user")) {
+        functions.logger.log("blocked by: ", chatId)
+      }
+
+      throw error
+    }
+  })
 
   await Promise.all(jobs)
   functions.logger.log(`${jobs.length} notifications send.`)
