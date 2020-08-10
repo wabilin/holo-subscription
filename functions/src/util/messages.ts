@@ -1,7 +1,7 @@
 import * as functions from 'firebase-functions';
 import { LiveInfo } from 'holo-schedule'
 
-import { getSubscriptionsRef } from './db'
+import { getSubscriptionsRef, removeUser } from './db'
 import { Subscription } from '../types'
 import { getTelegram } from './bot'
 
@@ -33,9 +33,12 @@ export async function notifyForLive(live: LiveInfo, buildMessage: BuildMessage) 
     } catch(error) {
       if (error.message.includes("Forbidden: bot was blocked by the user")) {
         functions.logger.log("blocked by: ", chatId)
-      }
+        await removeUser(chatId)
 
-      throw error
+        functions.logger.log(`User ${chatId} removed.`)
+      } else {
+        throw error
+      }
     }
   })
 
