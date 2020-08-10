@@ -20,13 +20,16 @@ export async function notifyForLive(live: LiveInfo, buildMessage: BuildMessage) 
 
   const subscriptionsRef = getSubscriptionsRef()
 
-  const jobs: Promise<unknown>[] = []
-
+  const chatIdSet: Set<number> = new Set()
   const subscriptions = await subscriptionsRef.where('vtuber', 'in', allVtubers).get()
   subscriptions.forEach(x => {
     const { chatId } = x.data() as Subscription
-    jobs.push(telegram.sendMessage(chatId, message))
+    chatIdSet.add(chatId)
   })
+
+  const jobs: Promise<unknown>[] = [...chatIdSet].map(chatId => (
+    telegram.sendMessage(chatId, message)
+  ))
 
   await Promise.all(jobs)
   functions.logger.log(`${jobs.length} notifications send.`)
