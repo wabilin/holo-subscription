@@ -267,3 +267,21 @@ export function getAllUsersConfig() {
   const configsRef = getUserConfigsRef()
   return configsRef.get()
 }
+
+export async function removeUser(chatId: number) {
+  const db = getFirestore()
+  const subscriptionsRef = db.collection(SUBSCRIPTIONS).where('chatId', '==', chatId)
+  const batch = db.batch()
+
+  const subscriptions = await subscriptionsRef.get()
+  subscriptions.forEach(x => {
+    batch.delete(x.ref)
+  })
+
+  const configs = await getUserConfigsRef().where('chatId', '==', chatId).get()
+  configs.forEach(x => {
+    batch.delete(x.ref)
+  })
+
+  await batch.commit()
+}
