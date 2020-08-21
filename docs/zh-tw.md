@@ -19,7 +19,8 @@
 - `/haaton` - はあちゃまっちゃま
 
 ## 意見回饋
-有任何問題或意見，歡迎在 [GitHub Issues](https://github.com/wabilin/holo-subscription/issues) 提出。
+有任何問題或意見，歡迎在 [GitHub Issues](https://github.com/wabilin/holo-subscription/issues)
+或推特 [@holosub](https://twitter.com/holosub) 提出。
 
 ## Screenshots
 

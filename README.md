@@ -21,6 +21,7 @@ Unofficial Telegram Bot to subscribe Hololive lives.
 ## Feedback
 Feedbacks are welcome!
 Please visit [GitHub Issues](https://github.com/wabilin/holo-subscription/issues).
+Or twitter: [@holosub](https://twitter.com/holosub)
 
 ## Contributing
 Pull requests are welcome!

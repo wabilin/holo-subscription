@@ -19,7 +19,8 @@ Hololive 非公式サブスクリプション Telegram ボット
 - `/haaton` - はあちゃまっちゃま~
 
 ## フィードバック
-[GitHub Issues](https://github.com/wabilin/holo-subscription/issues)で、フィードバック大歓迎！
+[GitHub Issues](https://github.com/wabilin/holo-subscription/issues)
+やツイッター([@holosub](https://twitter.com/holosub)) で、フィードバック大歓迎！
 
 ## スクショ
 
