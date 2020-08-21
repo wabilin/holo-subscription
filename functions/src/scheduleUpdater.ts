@@ -26,7 +26,7 @@ function shouldUpdate(storedLive: LiveInfo|undefined, fetchedLive: LiveInfo): bo
   )
 }
 
-const scheduleUpdater = functions.pubsub.schedule('every 1 hours').onRun(async (context) => {
+const scheduleUpdater = functions.pubsub.schedule('every 30 minutes').onRun(async (context) => {
   const html = await getScheduleHtml()
 
   const streamerImageDict = await getStreamerImageDict() || {}
