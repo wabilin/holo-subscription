@@ -5,6 +5,17 @@ import { getSubscriptionsRef, removeUser } from './db'
 import { Subscription } from '../types'
 import { getTelegram } from './bot'
 
+// TODO: Change this in DB
+function subscriptionKeys(scheduleNames: string[]): string[] {
+  return scheduleNames.map(x => {
+    if (x === 'アキロゼ') {
+      return 'アキ・ローゼンタール'
+    } else {
+      return x
+    }
+  })
+}
+
 type BuildMessage = (live: LiveInfo) => string
 
 export async function notifyForLive(live: LiveInfo, buildMessage: BuildMessage) {
@@ -21,7 +32,8 @@ export async function notifyForLive(live: LiveInfo, buildMessage: BuildMessage) 
   const subscriptionsRef = getSubscriptionsRef()
 
   const chatIdSet: Set<number> = new Set()
-  const subscriptions = await subscriptionsRef.where('vtuber', 'in', allVtubers).get()
+  const subscriptionNames = subscriptionKeys(allVtubers)
+  const subscriptions = await subscriptionsRef.where('vtuber', 'in', subscriptionNames).get()
   subscriptions.forEach(x => {
     const { chatId } = x.data() as Subscription
     chatIdSet.add(chatId)
