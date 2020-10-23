@@ -38,5 +38,5 @@ export const VTUBERS = [
   'Kiara',
   'Moona',
   'Iofi',
-  'Risu',
+  'Risu'
 ]
