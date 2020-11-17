@@ -31,4 +31,12 @@ export const VTUBERS = [
   '獅白ぼたん',
   '魔乃アロエ',
   '尾丸ポルカ',
+  'Gura',
+  'Amelia',
+  'Ina',
+  'Calli',
+  'Kiara',
+  'Moona',
+  'Iofi',
+  'Risu'
 ]
