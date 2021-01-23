@@ -4,7 +4,7 @@ import * as moment from 'moment-timezone'
 import { getScheduleRef, createIncomingNotifications } from "./util/db";
 import { ScheduleItem } from './types'
 
-const checkIncomingLive = functions.pubsub.schedule('every 10 minutes').onRun(async (context) => {
+const checkIncomingLive = functions.pubsub.schedule('every 10 minutes').onRun(async () => {
   const now = new Date()
   const halfHourLater: Date = moment().add(30, 'minutes').toDate()
 

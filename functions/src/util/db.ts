@@ -120,7 +120,7 @@ export async function getStoredSchedule(before: Date): Promise<Schedule> {
     const item = x.data() as ScheduleItemFromDb
     storedSchedule[item.link] = {
       ...item,
-      time: item.time.toDate()
+      time: item.time.toDate(),
     }
   })
 
@@ -137,7 +137,7 @@ export async function getLive(liveId: string): Promise<LiveInfo> {
 
   return {
     ...item,
-    time: item.time.toDate()
+    time: item.time.toDate(),
   }
 }
 
@@ -240,7 +240,7 @@ export function clearOldDbData() {
 
   return Promise.all([
     clearOldLives(threeDaysAgo),
-    clearOldIncomingNotifications(threeDaysAgo)
+    clearOldIncomingNotifications(threeDaysAgo),
   ])
 }
 
@@ -252,7 +252,7 @@ function getUserConfigsRef() {
 export async function createUserConfigIfNotExist(chatId: number) {
   const config: UserConfig = {
     chatId,
-    zone: 'Asia/Tokyo'
+    zone: 'Asia/Tokyo',
   }
   const key = validKey(String(chatId))
   const docRef = getUserConfigsRef().doc(key)

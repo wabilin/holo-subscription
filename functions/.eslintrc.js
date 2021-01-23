@@ -31,7 +31,6 @@ module.exports = {
     ],
     "rules": {
         "@typescript-eslint/no-floating-promises": "error",
-        "@typescript-eslint/no-param-reassign": "error",
         "@typescript-eslint/no-shadow": [
             "error",
             {
@@ -41,7 +40,7 @@ module.exports = {
         "@typescript-eslint/no-unnecessary-type-assertion": "error",
         "@typescript-eslint/prefer-for-of": "warn",
         "@typescript-eslint/unified-signatures": "warn",
-        "comma-dangle": "warn",
+        "comma-dangle": ["error", "always-multiline"],
         "eqeqeq": [
             "error",
             "always"

@@ -22,7 +22,7 @@ function liveInfoMessage(live: LiveInfo): string {
   return msg
 }
 
-const notifyNewLive = functions.firestore.document(`${SCHEDULE}/{key}`).onWrite(async (change, context) => {
+const notifyNewLive = functions.firestore.document(`${SCHEDULE}/{key}`).onWrite(async (change) => {
   const item = change.after.data() as ScheduleItemFromDb
 
   // it's data delete event
@@ -30,7 +30,7 @@ const notifyNewLive = functions.firestore.document(`${SCHEDULE}/{key}`).onWrite(
 
   const live: LiveInfo = {
     ...item,
-    time: item.time.toDate()
+    time: item.time.toDate(),
   }
 
   await notifyForLive(live, liveInfoMessage)

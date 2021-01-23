@@ -41,5 +41,5 @@ export const VTUBERS = [
   'Risu',
   'Ollie',
   'Anya',
-  'Reine'
+  'Reine',
 ]
