@@ -141,7 +141,7 @@ export async function getLive(liveId: string): Promise<LiveInfo> {
   }
 }
 
-export async function updateSchedule(lives: LiveInfo[]) {
+export async function updateSchedule(lives: LiveInfo[]): Promise<void> {
   if (lives.length === 0) {
     return
   }
@@ -163,7 +163,7 @@ function getIncomingNotificationsRef() {
   return db.collection(INCOMING_NOTIFICATIONS)
 }
 
-export async function createIncomingNotifications(lives: LiveInfo[]) {
+export async function createIncomingNotifications(lives: LiveInfo[]): Promise<void> {
   if (lives.length === 0) {
     return
   }
@@ -235,7 +235,7 @@ async function clearOldIncomingNotifications(beforeTime: Date) {
   return batchClear(notificationsRef)
 }
 
-export function clearOldDbData() {
+export function clearOldDbData(): Promise<[void, void]>{
   const threeDaysAgo: Date = moment().subtract(3, 'days').toDate()
 
   return Promise.all([
@@ -249,7 +249,7 @@ function getUserConfigsRef() {
   return db.collection(USER_CONFIGS)
 }
 
-export async function createUserConfigIfNotExist(chatId: number) {
+export async function createUserConfigIfNotExist(chatId: number): Promise<void>{
   const config: UserConfig = {
     chatId,
     zone: 'Asia/Tokyo',

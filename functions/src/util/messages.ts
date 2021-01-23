@@ -18,7 +18,7 @@ function subscriptionKeys(scheduleNames: string[]): string[] {
 
 type BuildMessage = (live: LiveInfo) => string
 
-export async function notifyForLive(live: LiveInfo, buildMessage: BuildMessage) {
+export async function notifyForLive(live: LiveInfo, buildMessage: BuildMessage): Promise<void> {
   const telegram = getTelegram()
 
   const { streamer, guests, link } = live

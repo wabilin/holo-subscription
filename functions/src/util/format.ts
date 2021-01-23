@@ -1,4 +1,4 @@
-export function listEndWith(list: string[], ending: string) {
+export function listEndWith(list: string[], ending: string): string {
   const {length} = list
   if (length <= 1) {
     return list.join('')
@@ -11,6 +11,6 @@ export function listEndWith(list: string[], ending: string) {
   return `${front} ${ending} ${last}`
 }
 
-export function markdownUl(list: string[]) {
+export function markdownUl(list: string[]): string {
   return list.map(x => `- ${x}`).join('\n')
 }

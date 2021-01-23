@@ -5,7 +5,7 @@ module.exports = {
     },
     "parser": "@typescript-eslint/parser",
     "parserOptions": {
-        "project": "tsconfig.json",
+        "project": "./tsconfig.eslint.json",
         "sourceType": "module"
     },
     "plugins": [
@@ -48,6 +48,8 @@ module.exports = {
         "no-throw-literal": "error",
         "no-var": "error",
         "no-void": "error",
-        "prefer-const": "error"
+        "prefer-const": "error",
+
+        "@typescript-eslint/explicit-module-boundary-types": 0,
     }
 };

@@ -11,7 +11,7 @@ function ipMask(maskSize: number|string) {
     return -1 << (32 - Number(maskSize))
 }
 
-export default function ipCheck(allowed: string, ip: string) {
+export default function ipCheck(allowed: string, ip: string): boolean {
   if (allowed.includes('/')) {
     const [allowedIp, maskStr] = allowed.split('/')
     return (ipNumber(ip) & ipMask(maskStr)) === ipNumber(allowedIp)
