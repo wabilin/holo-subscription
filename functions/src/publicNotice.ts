@@ -6,7 +6,7 @@ import { PUBLIC_NOTICE } from './util/dbCollections'
 import { UserConfig } from './types';
 
 
-const publicNotice = functions.firestore.document(`${PUBLIC_NOTICE}/{key}`).onCreate(async (change, context) => {
+const publicNotice = functions.firestore.document(`${PUBLIC_NOTICE}/{key}`).onCreate(async (change) => {
   const { message } = change.data()
   if (!message) {
     return

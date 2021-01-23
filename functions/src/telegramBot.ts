@@ -153,7 +153,7 @@ function webhookBot() {
   })
 
   // Subscribe with format "+Name"
-  bot.hears(/^\-(.+)/, (ctx) => {
+  bot.hears(/^-(.+)/, (ctx) => {
     functions.logger.log('Hears "-" ', ctx.match)
 
     const vtuber = ctx.match && ctx.match[1] || 'unknown'

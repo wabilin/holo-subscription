@@ -120,7 +120,7 @@ export async function getStoredSchedule(before: Date): Promise<Schedule> {
     const item = x.data() as ScheduleItemFromDb
     storedSchedule[item.link] = {
       ...item,
-      time: item.time.toDate()
+      time: item.time.toDate(),
     }
   })
 
@@ -137,11 +137,11 @@ export async function getLive(liveId: string): Promise<LiveInfo> {
 
   return {
     ...item,
-    time: item.time.toDate()
+    time: item.time.toDate(),
   }
 }
 
-export async function updateSchedule(lives: LiveInfo[]) {
+export async function updateSchedule(lives: LiveInfo[]): Promise<void> {
   if (lives.length === 0) {
     return
   }
@@ -163,7 +163,7 @@ function getIncomingNotificationsRef() {
   return db.collection(INCOMING_NOTIFICATIONS)
 }
 
-export async function createIncomingNotifications(lives: LiveInfo[]) {
+export async function createIncomingNotifications(lives: LiveInfo[]): Promise<void> {
   if (lives.length === 0) {
     return
   }
@@ -235,12 +235,12 @@ async function clearOldIncomingNotifications(beforeTime: Date) {
   return batchClear(notificationsRef)
 }
 
-export function clearOldDbData() {
+export function clearOldDbData(): Promise<[void, void]>{
   const threeDaysAgo: Date = moment().subtract(3, 'days').toDate()
 
   return Promise.all([
     clearOldLives(threeDaysAgo),
-    clearOldIncomingNotifications(threeDaysAgo)
+    clearOldIncomingNotifications(threeDaysAgo),
   ])
 }
 
@@ -249,10 +249,10 @@ function getUserConfigsRef() {
   return db.collection(USER_CONFIGS)
 }
 
-export async function createUserConfigIfNotExist(chatId: number) {
+export async function createUserConfigIfNotExist(chatId: number): Promise<void>{
   const config: UserConfig = {
     chatId,
-    zone: 'Asia/Tokyo'
+    zone: 'Asia/Tokyo',
   }
   const key = validKey(String(chatId))
   const docRef = getUserConfigsRef().doc(key)

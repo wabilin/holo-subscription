@@ -1,7 +1,5 @@
 ## Compiled JavaScript files
-**/*.js
-**/*.js.map
-!babel.config.js
+lib
 
 # Typescript v1 declaration files
 typings/
