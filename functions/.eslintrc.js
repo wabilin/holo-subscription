@@ -25,12 +25,12 @@ module.exports = {
         "eslint-plugin-import",
         "@typescript-eslint"
     ],
+    "extends": [
+        'eslint:recommended',
+        'plugin:@typescript-eslint/recommended',
+    ],
     "rules": {
-        "@typescript-eslint/adjacent-overload-signatures": "error",
-        "@typescript-eslint/no-empty-function": "error",
-        "@typescript-eslint/no-empty-interface": "warn",
         "@typescript-eslint/no-floating-promises": "error",
-        "@typescript-eslint/no-namespace": "error",
         "@typescript-eslint/no-param-reassign": "error",
         "@typescript-eslint/no-shadow": [
             "error",
@@ -40,19 +40,15 @@ module.exports = {
         ],
         "@typescript-eslint/no-unnecessary-type-assertion": "error",
         "@typescript-eslint/prefer-for-of": "warn",
-        "@typescript-eslint/triple-slash-reference": "error",
         "@typescript-eslint/unified-signatures": "warn",
         "comma-dangle": "warn",
-        "constructor-super": "error",
         "eqeqeq": [
-            "warn",
+            "error",
             "always"
         ],
-        "import/no-deprecated": "warn",
+        "import/no-deprecated": "error",
         "import/no-extraneous-dependencies": "error",
-        "import/no-unassigned-import": "warn",
-        "no-cond-assign": "error",
-        "no-duplicate-case": "error",
+        "import/no-unassigned-import": "error",
         "no-duplicate-imports": "error",
         "no-empty": [
             "error",
@@ -62,13 +58,10 @@ module.exports = {
         ],
         "no-invalid-this": "error",
         "no-new-wrappers": "error",
-        "no-redeclare": "error",
         "no-sequences": "error",
         "no-throw-literal": "error",
-        "no-unsafe-finally": "error",
-        "no-unused-labels": "error",
-        "no-var": "warn",
+        "no-var": "error",
         "no-void": "error",
-        "prefer-const": "warn"
+        "prefer-const": "error"
     }
 };
