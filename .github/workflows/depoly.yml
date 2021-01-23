@@ -1,4 +1,4 @@
-name: Build and Deploy
+name: Deploy
 on:
   push:
     branches:
@@ -9,24 +9,19 @@ defaults:
       working-directory: functions
 
 jobs:
-  install:
+  deploy:
     name: Install
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [10.x]
     steps:
       - name: Checkout Repo
         uses: actions/checkout@master
+      - name: Setup Node
+        uses: actions/setup-node@v2
+        with:
+          node-version: '10'
       - name: Install Dependencies
         run: npm ci
-  deploy:
-    name: Deploy
-    needs: install
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout Repo
-        uses: actions/checkout@master
+
       - name: Deploy to Firebase
         uses: w9jds/firebase-action@master
         with:
