@@ -12,7 +12,9 @@ jobs:
   install:
     name: Install
     runs-on: ubuntu-latest
-    working-directory: functions
+    strategy:
+      matrix:
+        node-version: [10.x]
     steps:
       - name: Checkout Repo
         uses: actions/checkout@master
