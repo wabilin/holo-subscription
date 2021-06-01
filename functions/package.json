@@ -19,7 +19,7 @@
     "firebase-functions": "3.14.1",
     "holo-schedule": "0.3.1",
     "moment-timezone": "0.5.33",
-    "telegraf": "3.38.0"
+    "telegraf": "4.3.0"
   },
   "devDependencies": {
     "@babel/core": "7.14.3",
