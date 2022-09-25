@@ -18,7 +18,7 @@
     "firebase-admin": "9.12.0",
     "firebase-functions": "3.16.0",
     "holo-schedule": "0.3.1",
-    "moment-timezone": "0.5.34",
+    "moment-timezone": "0.5.35",
     "telegraf": "3.38.0"
   },
   "devDependencies": {
